@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "useDefineForClassFields": true,
+    "lib": ["ES2020", "DOM", "DOM.Iterable"],
+    "module": "ESNext",
+    "skipLibCheck": true,
+    "baseUrl": ".", // 这里是相对于 tsconfig.json 的基础路径
+    "paths": {
+      "@/*": ["src/*"], // 所有 @ 都会被替换成 src
+    },
+
+    /* Bundler mode */
+    "moduleResolution": "Bundler",
+    "allowImportingTsExtensions": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+
+    /* Linting */
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true
+  },
+  "include": ["src"],
+  "exclude": ["node_modules"],
+  "references": [{ "path": "./tsconfig.node.json" }]
+}
