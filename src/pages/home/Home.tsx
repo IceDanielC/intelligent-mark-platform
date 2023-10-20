@@ -1,13 +1,13 @@
-import { useNavigate } from "react-router-dom";
-import { Button, Typography } from "antd";
-import { LOGIN_PATHNAME } from "@/router";
-import styles from "./Home.module.scss";
-import { FireOutlined } from "@ant-design/icons";
+import { useNavigate } from 'react-router-dom'
+import { Button, Typography } from 'antd'
+import { LOGIN_PATHNAME } from '@/router'
+import styles from './Home.module.scss'
+import { FireOutlined } from '@ant-design/icons'
 
-const { Title, Paragraph } = Typography;
+const { Title, Paragraph } = Typography
 
 const Home: React.FC = () => {
-  const navigator = useNavigate();
+  const navigator = useNavigate()
 
   return (
     <div className={styles.container}>
@@ -21,7 +21,7 @@ const Home: React.FC = () => {
             type="primary"
             shape="round"
             onClick={() => navigator(LOGIN_PATHNAME)}
-            style={{ padding: "0 2rem" }}
+            style={{ padding: '0 2rem' }}
           >
             <FireOutlined />
             开始使用
@@ -29,7 +29,7 @@ const Home: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Home;
+export default Home

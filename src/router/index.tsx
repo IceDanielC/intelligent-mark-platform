@@ -47,6 +47,7 @@ export function isLoginOrRegister(pathname: string) {
 }
 
 export function isNoNeedUserInfo(pathname: string) {
-  if ([HOME_PATHNAME, LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) return true
+  if ([HOME_PATHNAME, LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname))
+    return true
   return false
 }
