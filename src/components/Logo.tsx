@@ -14,7 +14,7 @@ const Logo: React.FC = () => {
           <Title>
             <FormOutlined />
           </Title>
-          <Title>小慕问卷</Title>
+          <Title>智能化病虫害标注与检测系统</Title>
         </Space>
       </Link>
     </div>

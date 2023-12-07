@@ -17,7 +17,7 @@ const MainLayout: React.FC = () => {
         <Outlet />
       </Content>
       <Footer className={styles.footer}>
-        小慕问卷 &copy;2023 - present. Created by Ice
+        智能化病虫害标注与检测系统 &copy;2023 - present. Created by Ice
       </Footer>
     </Layout>
   )

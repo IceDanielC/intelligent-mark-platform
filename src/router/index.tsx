@@ -1,53 +1,91 @@
-// import React, { lazy } from 'react'
-import { createBrowserRouter } from 'react-router-dom'
+import { lazy } from 'react'
+import {
+  type LoaderFunction,
+  createBrowserRouter,
+  redirect
+} from 'react-router-dom'
+import { message } from 'antd'
 
 import MainLayout from '../layouts/MainLayout'
+import ManageLayout from '@/layouts/ManageLayout'
 import Home from '@/pages/home/Home'
 import Login from '@/pages/login/Login'
-// import Register from '../pages/Register'
 import NotFound from '../pages/NotFound'
+
+const UserManagement = lazy(() => import('@/pages/authority/UserManagement'))
+const RoleManagement = lazy(() => import('@/pages/authority/RoleManagement'))
+const Dashboard = lazy(() => import('@/pages/dashboard'))
+
+const homeLoader: LoaderFunction = async ({ request }) => {
+  const url = new URL(request.url)
+  const user = localStorage.getItem('user/info')
+
+  if (url.pathname === '/login') {
+    if (user) return redirect('/manage/dashboard')
+  }
+  return {}
+}
+
+const manageLoader: LoaderFunction = async () => {
+  const user = localStorage.getItem('user/info')
+  if (!user) {
+    message.error('身份信息失效，请重新登陆')
+    return redirect('/')
+  }
+  return {}
+}
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <MainLayout />,
+    loader: homeLoader,
     children: [
       {
-        path: '/',
+        index: true,
+        loader: () => redirect('/home')
+      },
+      {
+        path: 'home',
         element: <Home />
       },
       {
         path: 'login',
         element: <Login />
-      },
-      // {
-      //   path: 'register',
-      //   element: <Register />
-      // },
-      {
-        path: '*', // 404 路由配置，都写在最后（兜底）
-        element: <NotFound />
       }
     ]
+  },
+  {
+    path: '/manage',
+    element: <ManageLayout />,
+    loader: manageLoader,
+    children: [
+      {
+        index: true,
+        loader: () => redirect('/manage/dashboard')
+      },
+      {
+        path: 'auth-management/user',
+        element: <UserManagement />
+      },
+      {
+        path: 'auth-management/role',
+        element: <RoleManagement />
+      },
+      {
+        path: 'dashboard',
+        element: <Dashboard />
+      }
+    ]
+  },
+  {
+    path: '*', // 404 路由配置
+    element: <NotFound />
   }
 ])
 
 export default router
 
-// ------------ 分割线 ------------
-
 // 常用的路由，常量
 export const HOME_PATHNAME = '/'
 export const LOGIN_PATHNAME = '/login'
-export const REGISTER_PATHNAME = '/register'
-
-export function isLoginOrRegister(pathname: string) {
-  if ([LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname)) return true
-  return false
-}
-
-export function isNoNeedUserInfo(pathname: string) {
-  if ([HOME_PATHNAME, LOGIN_PATHNAME, REGISTER_PATHNAME].includes(pathname))
-    return true
-  return false
-}

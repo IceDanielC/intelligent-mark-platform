@@ -3,6 +3,7 @@ import request, { type ResData } from '@/utils/request'
 export type DoubleToken = {
   accessToken: string
   freshToken: string
+  username?: string
 }
 
 export const loginService = (username: string, password: string) =>

@@ -1,12 +1,13 @@
 import React, { useEffect } from 'react'
 // import { useNavigate } from "react-router-dom";
-import { Typography, Space, Form, Input, Button, Checkbox, message } from 'antd'
+import { Typography, Space, Form, Input, Button, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 // import { MANAGE_INDEX_PATHNAME } from "../router";
 import { loginService } from '@/services/user'
 import styles from './Login.module.scss'
 import request from '@/utils/request'
+import { useNavigate } from 'react-router-dom'
 
 const { Title } = Typography
 
@@ -33,7 +34,7 @@ function getUserInfoFromStorage() {
 }
 
 const Login: React.FC = () => {
-  // const nav = useNavigate();
+  const navigator = useNavigate()
   const [form] = Form.useForm() // 第三方 hook
 
   useEffect(() => {
@@ -50,9 +51,11 @@ const Login: React.FC = () => {
       manual: true,
       onSuccess(result) {
         if (result.code === 200) {
-          const { accessToken, freshToken } = result.data
+          const { accessToken, freshToken, username } = result.data
           localStorage.setItem(ACCESS_TOKEN, accessToken)
           localStorage.setItem(FRESH_TOKEN, freshToken)
+          localStorage.setItem('user/info', username as string)
+          navigator('/manage')
           message.success('登录成功')
         }
       }
@@ -110,13 +113,6 @@ const Login: React.FC = () => {
             rules={[{ required: true, message: '请输入密码' }]}
           >
             <Input.Password />
-          </Form.Item>
-          <Form.Item
-            name="remember"
-            valuePropName="checked"
-            wrapperCol={{ offset: 6, span: 16 }}
-          >
-            <Checkbox>记住我</Checkbox>
           </Form.Item>
           <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
             <Space>
