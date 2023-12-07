@@ -2,9 +2,6 @@
 import { ACCESS_TOKEN, FRESH_TOKEN } from '@/pages/login/Login'
 import { message } from 'antd'
 import axios from 'axios'
-import NProgress from 'nprogress'
-import 'nprogress/nprogress.css' // 导入样式，否则看不到效果
-NProgress.configure({ showSpinner: false }) // 显示右上角螺旋加载提示
 import router from '@/router'
 import { tokenFreshService } from '@/services/user'
 
@@ -22,7 +19,6 @@ const request = axios.create({
 
 //请求拦截器
 request.interceptors.request.use((config) => {
-  NProgress.start()
   // 配置header为access_token
   config.headers.Authorization = localStorage.getItem(ACCESS_TOKEN) ?? ''
   return config
@@ -31,8 +27,6 @@ request.interceptors.request.use((config) => {
 //响应拦截器
 request.interceptors.response.use(
   async (response) => {
-    // 关闭进度条
-    NProgress.done()
     if (response.data.code === 200) return response.data
     else if (
       response.data.code === 401 &&
