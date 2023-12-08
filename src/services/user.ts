@@ -23,8 +23,8 @@ export const loginService = (username: string, password: string) =>
 export const tokenFreshService = (freshToken: string) =>
   request.post<any, ResData<DoubleToken>>(`/admin/refresh?token=${freshToken}`)
 
-export const getAllUsers = () =>
-  request.get<any, ResData<User[]>>('/admin/userList')
+export const getAllUsers = (username = '') =>
+  request.get<any, ResData<User[]>>('/admin/userList?username=' + username)
 
 export const updateUsers = (user: User) =>
   request.post<any, ResData<null>>('/admin/update/user', user)

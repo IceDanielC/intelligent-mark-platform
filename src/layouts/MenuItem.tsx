@@ -1,8 +1,8 @@
 import {
   DashboardOutlined,
+  ExpandOutlined,
   UploadOutlined,
-  UserOutlined,
-  VideoCameraOutlined
+  UserOutlined
 } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom'
 
@@ -28,9 +28,9 @@ export const menuItems = [
     ]
   },
   {
-    key: '2',
-    icon: <VideoCameraOutlined />,
-    label: 'nav 2'
+    key: 'auto-annotate',
+    icon: <ExpandOutlined />,
+    label: <NavLink to="/manage/auto-annotate">病虫害自动化标注</NavLink>
   },
   {
     key: '3',

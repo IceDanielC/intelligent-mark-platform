@@ -1,7 +1,7 @@
 import type { ProColumns } from '@ant-design/pro-components'
-import { App, Popconfirm, Tag } from 'antd'
+import { App, Button, Form, Input, Popconfirm, Space, Tag } from 'antd'
 import { EditableProTable } from '@ant-design/pro-components'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 
 import {
@@ -10,6 +10,7 @@ import {
   updateUsers,
   deleteUser
 } from '@/services/user'
+import { SearchOutlined } from '@ant-design/icons'
 
 const roleOptions = [
   { label: 'ADMIN', value: 'ADMIN' },
@@ -18,13 +19,15 @@ const roleOptions = [
 
 export default () => {
   const { message } = App.useApp()
+  const [username, setUsername] = useState<string>('')
   const { data: userList, isFetching } = useQuery({
-    queryKey: ['/user/list'],
-    queryFn: () => getAllUsers().then((res) => res.data)
+    queryKey: ['/user/list', username],
+    queryFn: () => getAllUsers(username).then((res) => res.data)
   })
   const queryClient = useQueryClient()
 
   const formRef = useRef<any>(null)
+  const [searchRef] = Form.useForm()
 
   const handleDelete = async (id: number) => {
     const res = await deleteUser(id)
@@ -123,20 +126,17 @@ export default () => {
           key="delete"
           title="删除用户"
           description={`您确定要删除 ${record.username} ?`}
-          onConfirm={() => handleDelete(record.id as number)}
+          onConfirm={() => {
+            if (record.id === 1 || record.id === 2) {
+              message.warning('此条数据不能修改')
+              return
+            }
+            handleDelete(record.id as number)
+          }}
           okText="Yes"
           cancelText="No"
         >
-          <a
-            onClick={() => {
-              if (record.id === 1 || record.id === 2) {
-                message.warning('此条数据不能修改')
-                return
-              }
-            }}
-          >
-            删除
-          </a>
+          <a>删除</a>
         </Popconfirm>
       ]
     }
@@ -144,6 +144,26 @@ export default () => {
 
   return (
     <>
+      <Space className="absolute z-[999] top-[125px] right-[70px]">
+        <Form className="h-[32px]" form={searchRef}>
+          <Form.Item name="username">
+            <Input
+              type="text"
+              size="small"
+              placeholder="请输入用户名"
+              allowClear
+            />
+          </Form.Item>
+        </Form>
+        <Button
+          size="small"
+          type="primary"
+          icon={<SearchOutlined />}
+          onClick={() => setUsername(searchRef.getFieldValue('username'))}
+        >
+          查询用户
+        </Button>
+      </Space>
       <EditableProTable<User>
         editableFormRef={formRef}
         rowKey="id"

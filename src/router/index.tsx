@@ -15,6 +15,7 @@ import NotFound from '../pages/NotFound'
 const UserManagement = lazy(() => import('@/pages/authority/UserManagement'))
 const RoleManagement = lazy(() => import('@/pages/authority/RoleManagement'))
 const Dashboard = lazy(() => import('@/pages/dashboard'))
+const AutoAnnotate = lazy(() => import('@/pages/autoAnnotate'))
 
 const homeLoader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
@@ -35,7 +36,7 @@ const manageLoader: LoaderFunction = async () => {
   return {}
 }
 
-const router = createBrowserRouter([
+const routes = [
   {
     path: '/',
     element: <MainLayout />,
@@ -75,6 +76,10 @@ const router = createBrowserRouter([
       {
         path: 'dashboard',
         element: <Dashboard />
+      },
+      {
+        path: 'auto-annotate',
+        element: <AutoAnnotate />
       }
     ]
   },
@@ -82,7 +87,9 @@ const router = createBrowserRouter([
     path: '*', // 404 路由配置
     element: <NotFound />
   }
-])
+]
+
+const router = createBrowserRouter(routes)
 
 export default router
 
