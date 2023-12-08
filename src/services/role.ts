@@ -7,3 +7,6 @@ export type Role = {
 }
 
 export const getRoleList = () => request.get<any, ResData<Role[]>>('/role/list')
+
+export const updateRole = (role: Role) =>
+  request.post<any, ResData<null>>('/role/update', role)

@@ -1,7 +1,7 @@
 import type { ProColumns } from '@ant-design/pro-components'
 import { App, Button, Form, Input, Popconfirm, Space, Tag } from 'antd'
 import { EditableProTable } from '@ant-design/pro-components'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 
 import {
@@ -11,8 +11,9 @@ import {
   deleteUser
 } from '@/services/user'
 import { SearchOutlined } from '@ant-design/icons'
+import { getRoleList } from '@/services/role'
 
-const roleOptions = [
+export const roleOptions = [
   { label: 'ADMIN', value: 'ADMIN' },
   { label: 'USER', value: 'USER' }
 ]
@@ -38,6 +39,18 @@ export default () => {
       message.error('删除失败')
     }
   }
+
+  // get roleOptions
+  const [roleOptions, setRoleOptions] = useState<
+    { label: string; value: string }[]
+  >([])
+  useEffect(() => {
+    getRoleList().then((res) => {
+      setRoleOptions(
+        res.data?.map((role) => ({ label: role.role, value: role.role }))
+      )
+    })
+  }, [])
 
   const columns: ProColumns<User>[] = [
     {
