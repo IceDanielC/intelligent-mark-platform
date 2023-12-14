@@ -16,6 +16,7 @@ const UserManagement = lazy(() => import('@/pages/authority/UserManagement'))
 const RoleManagement = lazy(() => import('@/pages/authority/RoleManagement'))
 const Dashboard = lazy(() => import('@/pages/dashboard'))
 const AutoAnnotate = lazy(() => import('@/pages/autoAnnotate'))
+const DatasetSelect = lazy(() => import('@/pages/autoAnnotate/DatasetSelect'))
 
 const homeLoader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
@@ -78,7 +79,11 @@ const routes = [
         element: <Dashboard />
       },
       {
-        path: 'auto-annotate',
+        path: 'auto-annotate/dataset-select',
+        element: <DatasetSelect />
+      },
+      {
+        path: 'auto-annotate/detail/:dataset/:version',
         element: <AutoAnnotate />
       }
     ]

@@ -43,7 +43,7 @@ const Header = () => {
           ...pathname
             .split('/')
             .slice(1)
-            .map((item) => ({ title: item }))
+            .map((item) => ({ title: decodeURIComponent(item) }))
         ]}
       />
       <Dropdown

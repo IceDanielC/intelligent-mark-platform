@@ -30,7 +30,11 @@ export const menuItems = [
   {
     key: 'auto-annotate',
     icon: <ExpandOutlined />,
-    label: <NavLink to="/manage/auto-annotate">病虫害自动化标注</NavLink>
+    label: (
+      <NavLink to="/manage/auto-annotate/dataset-select">
+        病虫害自动化标注
+      </NavLink>
+    )
   },
   {
     key: '3',
