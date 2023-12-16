@@ -11,6 +11,21 @@ export type LabelInfoSelf = {
   color?: string
 }
 
+export type DatasetLabel = {
+  color: string
+  datasetId: number
+  id: number
+  name: string
+}
+
+export type YOLOLabel = {
+  labelIndex: number
+  x: number
+  y: number
+  width: number
+  height: number
+}
+
 export const getLabelsByImage = (imageUrl: string) =>
   request.get<any, ResData<LabelInfoSelf[]>>(
     '/labelInfo/imageLabels?imageUrl=' + imageUrl
@@ -19,3 +34,13 @@ export const getLabelsByImage = (imageUrl: string) =>
 // 保存每个id图片的所有标签
 export const saveLabelByImage = (imageId: number, labels: LabelInfoSelf[]) =>
   request.post<any, ResData<any>>('/labelInfo/save?imageId=' + imageId, labels)
+
+// 获取对于数据集的保存的所有labels
+export const getDatasetLabels = (datasetName: string, version: string) =>
+  request.get<any, ResData<DatasetLabel[]>>(
+    `/labelGroup/dataset/${datasetName}/${version}`
+  )
+
+// 导出图片中的所有标签（YOLO格式）
+export const downloadLabelYOLO = (labels: YOLOLabel[]) =>
+  request.post('/labelInfo/download/yolo', labels)

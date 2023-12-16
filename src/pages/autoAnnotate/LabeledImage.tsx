@@ -4,7 +4,8 @@ import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
 import type { LabelInfo } from '@/services/detection'
 import { Spin } from 'antd'
 import { useQuery } from 'react-query'
-import { getLabelsByImage } from '@/services/label'
+import { getDatasetLabels, getLabelsByImage } from '@/services/label'
+import { useParams } from 'react-router-dom'
 
 export type ImageLabelComponentType = {
   color: string
@@ -16,6 +17,8 @@ export type ImageLabelComponentType = {
   y: number
 }
 
+const DEFAULT_COLOR = 'blue'
+
 const ImageLabelComponent: React.FC<{
   imageUrl: string
   labels: LabelInfo[]
@@ -25,13 +28,25 @@ const ImageLabelComponent: React.FC<{
   setImageLoading: (l: boolean) => void
 }> = forwardRef(
   ({ imageUrl, labels, annotating, imageLoading, setImageLoading }, ref) => {
+    const { dataset, version } = useParams()
+
     const simpleImageLabel = useRef<any>(null)
     useImperativeHandle(ref, () => ({
       getImageLabel: () => simpleImageLabel
     }))
+
     const { data: labelsFromServer } = useQuery({
       queryKey: ['/labelInfo/imageLabels', imageUrl],
       queryFn: () => getLabelsByImage(imageUrl).then((res) => res.data)
+    })
+
+    const { data: savedLabels } = useQuery({
+      queryKey: ['/labelGroup/dataset', dataset, version],
+      queryFn: () =>
+        getDatasetLabels(dataset as string, version as string).then(
+          (res) => res.data
+        ),
+      staleTime: Infinity
     })
 
     useEffect(() => {
@@ -47,28 +62,30 @@ const ImageLabelComponent: React.FC<{
         simpleImageLabel.current = new SimpleImageLabel({
           el: 'ImageLabelComponent',
           imageUrl: image.src,
-          labels: labels // 云检测标签
-            .map((label, index) => ({
-              color: label.color ?? 'blue',
-              name: label.name,
-              uuid: label.name + index,
-              height: label.location.height / (image.naturalHeight as number),
-              width: label.location.width / (image.naturalWidth as number),
-              x: label.location.left / (image.naturalWidth as number),
-              y: label.location.top / (image.naturalHeight as number)
-            }))
-            .concat(
-              // 服务器存储标签
-              labelsFromServer?.map((label, index) => ({
-                color: label.color ?? 'blue',
-                name: label.labelName,
-                uuid: label.labelName + label.imageId + index,
-                height: label.heightPx / (image.naturalHeight as number),
-                width: label.widthPx / (image.naturalWidth as number),
-                x: label.leftPx / (image.naturalWidth as number),
-                y: label.topPx / (image.naturalHeight as number)
-              })) ?? []
-            ),
+          // 云检测标签 ? 显示云检测标签 : 显示服务器标签
+          labels:
+            labels.length > 0
+              ? labels.map((label, index) => ({
+                  color:
+                    savedLabels?.find((l) => l.name === label.name)?.color ??
+                    DEFAULT_COLOR,
+                  name: label.name,
+                  uuid: label.name + index,
+                  height:
+                    label.location.height / (image.naturalHeight as number),
+                  width: label.location.width / (image.naturalWidth as number),
+                  x: label.location.left / (image.naturalWidth as number),
+                  y: label.location.top / (image.naturalHeight as number)
+                }))
+              : labelsFromServer?.map((label, index) => ({
+                  color: label.color ?? DEFAULT_COLOR,
+                  name: label.labelName,
+                  uuid: label.labelName + label.imageId + index,
+                  height: label.heightPx / (image.naturalHeight as number),
+                  width: label.widthPx / (image.naturalWidth as number),
+                  x: label.leftPx / (image.naturalWidth as number),
+                  y: label.topPx / (image.naturalHeight as number)
+                })) ?? [],
           contextmenu: (e: any) => {
             console.log(e)
           },

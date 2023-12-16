@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Tabs } from 'antd'
 import type { TabsProps } from 'antd'
 import AnnotatedTabItem from './AnnotatedTabItem'
@@ -8,6 +8,7 @@ import {
   unAnnotatedImagesFromDataset
 } from '@/services/image'
 import { useParams } from 'react-router-dom'
+import { useQuery } from 'react-query'
 
 // const onChange = (key: string) => {
 //   console.log(key)
@@ -15,46 +16,45 @@ import { useParams } from 'react-router-dom'
 
 const AutoAnnotate: React.FC = () => {
   const { dataset, version } = useParams()
-  const [total, setTotal] = useState(0)
-  const [annotated, setAnnotated] = useState(0)
-  const [unAnno, setUnAnno] = useState(0)
 
-  const initNumber = async () => {
-    const { data: allImages } = await imagesFromDataset(
-      dataset as string,
-      version as string
-    )
-    const { data: annotatedImages } = await annotatedImagesFromDataset(
-      dataset as string,
-      version as string
-    )
-    const { data: unAnnoImages } = await unAnnotatedImagesFromDataset(
-      dataset as string,
-      version as string
-    )
-    setTotal(allImages.length)
-    setAnnotated(annotatedImages.length)
-    setUnAnno(unAnnoImages.length)
-  }
+  const { data: allImages } = useQuery({
+    queryKey: ['/dataset/images', dataset, version, '1'],
+    queryFn: () =>
+      imagesFromDataset(dataset as string, version as string).then(
+        (res) => res.data
+      )
+  })
 
-  useEffect(() => {
-    initNumber()
-  }, [])
+  const { data: annotatedImages } = useQuery({
+    queryKey: ['/dataset/images', dataset, version, '2'],
+    queryFn: () =>
+      annotatedImagesFromDataset(dataset as string, version as string).then(
+        (res) => res.data
+      )
+  })
+
+  const { data: unAnnoImages } = useQuery({
+    queryKey: ['/dataset/images', dataset, version, '3'],
+    queryFn: () =>
+      unAnnotatedImagesFromDataset(dataset as string, version as string).then(
+        (res) => res.data
+      )
+  })
 
   const items: TabsProps['items'] = [
     {
       key: '1',
-      label: `全部 (${total})`,
+      label: `全部 (${allImages?.length ?? 0})`,
       children: <AnnotatedTabItem imageType="1" />
     },
     {
       key: '2',
-      label: `已标记 (${annotated})`,
+      label: `已标记 (${annotatedImages?.length ?? 0})`,
       children: <AnnotatedTabItem imageType="2" />
     },
     {
       key: '3',
-      label: `未标记 (${unAnno})`,
+      label: `未标记 (${unAnnoImages?.length ?? 0})`,
       children: <AnnotatedTabItem imageType="3" />
     }
   ]

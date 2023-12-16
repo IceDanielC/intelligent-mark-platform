@@ -3,7 +3,7 @@ import LabeledImage, { type ImageLabelComponentType } from './LabeledImage'
 import { useEffect, useRef, useState } from 'react'
 import { type LabelInfo, detectImageUseOnlineModal } from '@/services/detection'
 import { EditOutlined, RobotOutlined } from '@ant-design/icons'
-import { useQuery } from 'react-query'
+import { useQuery, useQueryClient } from 'react-query'
 import {
   annotatedImagesFromDataset,
   imagesFromDataset,
@@ -11,7 +11,8 @@ import {
   unAnnotatedImagesFromDataset
 } from '@/services/image'
 import { useParams } from 'react-router-dom'
-import { LabelInfoSelf, saveLabelByImage } from '@/services/label'
+import { LabelInfoSelf, YOLOLabel, saveLabelByImage } from '@/services/label'
+import LabelColumn from './LabelColumn'
 
 const imageTypeMap = {
   '1': imagesFromDataset,
@@ -66,6 +67,8 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
     }
   }, [currentIndex])
 
+  const queryClient = useQueryClient()
+
   // 保存标注
   const handleSaveAnnotate = async (imageId: number) => {
     setIsSaving(true)
@@ -89,7 +92,10 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
     if (res.code === 200) {
       message.success('自动保存成功')
       if (currentIndex !== imageList.length - 1) {
-        setCurrentIndex(currentIndex + 1)
+        if (imageType !== '3') setCurrentIndex(currentIndex + 1)
+        setLabels([])
+
+        queryClient.invalidateQueries(['/dataset/images'])
       } else {
         message.info('已经是最后一张图片')
       }
@@ -113,10 +119,41 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
     enabled: imageList[currentIndex] !== undefined
   })
 
+  const handleDownloadYOLO = async () => {
+    const saveLabels: YOLOLabel[] = labelImageRef.current
+      .getImageLabel()
+      .current?.labels?.map((label: ImageLabelComponentType) => {
+        return {
+          labelIndex: 0,
+          x: label.x,
+          y: label.y,
+          height: label.height,
+          width: label.width
+        }
+      })
+    const content = saveLabels
+      .map(
+        (label) =>
+          `${label.labelIndex} ${label.x} ${label.y} ${label.width} ${label.height}`
+      )
+      .join('\n')
+    const blob = new Blob([content], {
+      type: 'text/plain'
+    })
+    const href = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = href
+    link.download = `${images?.[currentIndex].name}.txt` // 设置下载的文件名
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(href)
+  }
+
   return (
     <>
-      <Spin spinning={isSaving} tip="标注保存中...">
-        <div className="flex">
+      <div className="flex">
+        <Spin spinning={isSaving} tip="标注保存中...">
           {isLoading ? (
             <Spin spinning={isLoading}></Spin>
           ) : (
@@ -129,8 +166,9 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
               setImageLoading={setImageLoading}
             />
           )}
-        </div>
-      </Spin>
+        </Spin>
+        <LabelColumn labelImageRef={labelImageRef} />
+      </div>
       <Space className="mt-8">
         <Button
           type="link"
@@ -172,7 +210,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
         {isImageAnnotated ? (
           <Popconfirm
             title="该图片已经标注"
-            description="再次自动化标注可能会导致标签冗余，您确定要继续吗"
+            description="自动化标注可能会覆盖当前标注，您确定要继续吗"
             okText="继续"
             cancelText="取消"
             onConfirm={handleAutoAnnotate}
@@ -195,6 +233,15 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
             云智能标注
           </Button>
         )}
+        <Button
+          type="primary"
+          size="small"
+          className="ml-4"
+          style={{ backgroundColor: 'orange' }}
+          onClick={handleDownloadYOLO}
+        >
+          导出标注文件(YOLO)
+        </Button>
       </Space>
     </>
   )
