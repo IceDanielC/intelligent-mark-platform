@@ -12,6 +12,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@ant-design/pro-components": "^2.6.43",
+    "@minko-fe/use-antd-resizable-header": "^2.8.12",
     "ahooks": "^3.7.8",
     "antd": "^5.10.1",
     "axios": "^1.5.1",
@@ -22,7 +23,8 @@
     "react-dom": "^18.2.0",
     "react-query": "^3.39.3",
     "react-router-dom": "^6.17.0",
-    "simple-image-label": "^0.0.7"
+    "simple-image-label": "^0.0.7",
+    "zustand": "^4.4.7"
   },
   "devDependencies": {
     "@types/lodash-es": "^4.17.12",

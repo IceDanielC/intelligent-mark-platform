@@ -1,5 +1,6 @@
 import {
   DashboardOutlined,
+  DatabaseOutlined,
   ExpandOutlined,
   UploadOutlined,
   UserOutlined
@@ -24,6 +25,17 @@ export const menuItems = [
       {
         key: 'role',
         label: <NavLink to="/manage/auth-management/role">角色管理</NavLink>
+      }
+    ]
+  },
+  {
+    key: 'dataset',
+    label: '数据集管理',
+    icon: <DatabaseOutlined />,
+    children: [
+      {
+        key: 'my-dataset',
+        label: <NavLink to="/manage/dataset/my-dataset">我的数据集</NavLink>
       }
     ]
   },

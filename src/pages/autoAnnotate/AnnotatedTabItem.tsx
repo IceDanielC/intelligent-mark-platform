@@ -10,9 +10,10 @@ import {
   isImageAnnotate,
   unAnnotatedImagesFromDataset
 } from '@/services/image'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { LabelInfoSelf, YOLOLabel, saveLabelByImage } from '@/services/label'
 import LabelColumn from './LabelColumn'
+import { useLabelStore } from '@/store/useLabelStore'
 
 const imageTypeMap = {
   '1': imagesFromDataset,
@@ -41,6 +42,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
   const [isAnnotating, setIsAnnotating] = useState(false)
   const [imageLoading, setImageLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const nav = useNavigate()
 
   const autosaveRef = useRef<any>(null)
 
@@ -49,6 +51,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
     if (images) {
       if (images.length === 0) {
         message.warning('该数据集还没有上传图片，请先上传', 5)
+        nav('/manage/dataset/my-dataset')
       }
     }
   }, [images, currentIndex])
@@ -119,12 +122,14 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
     enabled: imageList[currentIndex] !== undefined
   })
 
+  // 导出YOLO格式
+  const { datasetLabels } = useLabelStore()
   const handleDownloadYOLO = async () => {
     const saveLabels: YOLOLabel[] = labelImageRef.current
       .getImageLabel()
       .current?.labels?.map((label: ImageLabelComponentType) => {
         return {
-          labelIndex: 0,
+          labelIndex: datasetLabels.findIndex((l) => l.name === label.name),
           x: label.x,
           y: label.y,
           height: label.height,

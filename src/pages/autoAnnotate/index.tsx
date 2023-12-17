@@ -9,6 +9,7 @@ import {
 } from '@/services/image'
 import { useParams } from 'react-router-dom'
 import { useQuery } from 'react-query'
+import { useImageStore } from '@/store/useImageStore'
 
 // const onChange = (key: string) => {
 //   console.log(key)
@@ -16,29 +17,46 @@ import { useQuery } from 'react-query'
 
 const AutoAnnotate: React.FC = () => {
   const { dataset, version } = useParams()
+  const {
+    allImages,
+    annotatedImages,
+    unAnnoImages,
+    setAllImages,
+    setAnnotatedImages,
+    setunAnnoImages
+  } = useImageStore()
 
-  const { data: allImages } = useQuery({
+  useQuery({
     queryKey: ['/dataset/images', dataset, version, '1'],
     queryFn: () =>
       imagesFromDataset(dataset as string, version as string).then(
         (res) => res.data
-      )
+      ),
+    onSuccess(data) {
+      setAllImages(data)
+    }
   })
 
-  const { data: annotatedImages } = useQuery({
+  useQuery({
     queryKey: ['/dataset/images', dataset, version, '2'],
     queryFn: () =>
       annotatedImagesFromDataset(dataset as string, version as string).then(
         (res) => res.data
-      )
+      ),
+    onSuccess(data) {
+      setAnnotatedImages(data)
+    }
   })
 
-  const { data: unAnnoImages } = useQuery({
+  useQuery({
     queryKey: ['/dataset/images', dataset, version, '3'],
     queryFn: () =>
       unAnnotatedImagesFromDataset(dataset as string, version as string).then(
         (res) => res.data
-      )
+      ),
+    onSuccess(data) {
+      setunAnnoImages(data)
+    }
   })
 
   const items: TabsProps['items'] = [

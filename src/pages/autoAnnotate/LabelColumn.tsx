@@ -1,4 +1,5 @@
 import { DatasetLabel, getDatasetLabels } from '@/services/label'
+import { useLabelStore } from '@/store/useLabelStore'
 import { EllipsisOutlined } from '@ant-design/icons'
 import { Button, Card, Divider, Dropdown, MenuProps } from 'antd'
 import { useQuery } from 'react-query'
@@ -44,12 +45,16 @@ const DatasetLabelItem: React.FC<{
 
 const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
   const { dataset, version } = useParams()
-  const { data: savedLabels } = useQuery({
+  const { datasetLabels, setDatasetLabels } = useLabelStore()
+  useQuery({
     queryKey: ['/labelGroup/dataset', dataset, version],
     queryFn: () =>
       getDatasetLabels(dataset as string, version as string).then(
         (res) => res.data
       ),
+    onSuccess(labels) {
+      setDatasetLabels(labels)
+    },
     staleTime: Infinity
   })
 
@@ -72,7 +77,7 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
         </div>
 
         <Divider />
-        {savedLabels?.map((item) => (
+        {datasetLabels?.map((item) => (
           <DatasetLabelItem
             key={item.id}
             label={item}
