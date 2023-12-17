@@ -18,6 +18,8 @@ const Dashboard = lazy(() => import('@/pages/dashboard'))
 const AutoAnnotate = lazy(() => import('@/pages/autoAnnotate'))
 const DatasetSelect = lazy(() => import('@/pages/autoAnnotate/DatasetSelect'))
 const MyDataset = lazy(() => import('@/pages/dataset/MyDataset'))
+const ImportForm = lazy(() => import('@/pages/dataset/ImportForm'))
+const Detail = lazy(() => import('@/pages/dataset/Detail'))
 
 const homeLoader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
@@ -82,6 +84,14 @@ const routes = [
       {
         path: 'dataset/my-dataset',
         element: <MyDataset />
+      },
+      {
+        path: 'dataset/my-dataset/:datasetId/import',
+        element: <ImportForm />
+      },
+      {
+        path: 'dataset/my-dataset/:dataset/:version/detail',
+        element: <Detail />
       },
       {
         path: 'auto-annotate/dataset-select',

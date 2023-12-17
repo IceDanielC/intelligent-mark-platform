@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Space, Spin, Tooltip, message } from 'antd'
+import { Button, Popconfirm, Space, Spin, Tooltip, App } from 'antd'
 import LabeledImage, { type ImageLabelComponentType } from './LabeledImage'
 import { useEffect, useRef, useState } from 'react'
 import { type LabelInfo, detectImageUseOnlineModal } from '@/services/detection'
@@ -24,6 +24,7 @@ const imageTypeMap = {
 const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
   imageType
 }) => {
+  const { message } = App.useApp()
   const labelImageRef = useRef<any>(null)
   const { dataset, version } = useParams()
 
@@ -49,7 +50,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
   useEffect(() => {
     autosaveRef.current = images?.[currentIndex]
     if (images) {
-      if (images.length === 0) {
+      if (images.length === 0 && imageType === '1') {
         message.warning('该数据集还没有上传图片，请先上传', 5)
         nav('/manage/dataset/my-dataset')
       }
@@ -136,6 +137,10 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
           width: label.width
         }
       })
+    if (saveLabels.length === 0) {
+      message.info('请先进行标注...')
+      return
+    }
     const content = saveLabels
       .map(
         (label) =>

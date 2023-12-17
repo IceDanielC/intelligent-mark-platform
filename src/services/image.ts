@@ -2,7 +2,7 @@ import request, { type ResData } from '@/utils/request'
 
 export type DatasetImage = {
   datasetId: number
-  id: number
+  id?: number
   isAnnotate: string
   isValidated: string
   name: string
@@ -40,3 +40,11 @@ export const unAnnotatedImagesFromDataset = (
   request.get<any, ResData<DatasetImage[]>>(
     `/dataset/images/unAnnotated/${datasetName}/${version}`
   )
+
+// 上传图片
+export const uploadImages = (images: DatasetImage[]) =>
+  request.post<any, ResData<string | null>>('/dataset/upload/images', images)
+
+// 删除某个id的图片
+export const deleteImage = (imgId: number) =>
+  request.delete<any, ResData<string | null>>(`/image/${imgId}`)

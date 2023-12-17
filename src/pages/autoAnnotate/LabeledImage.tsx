@@ -100,7 +100,7 @@ const ImageLabelComponent: React.FC<{
     }
 
     return (
-      <Spin tip="图片加载中" spinning={imageLoading}>
+      <Spin tip="图片加载中" spinning={imageLoading} className="mt-[8%]">
         <div className="bg-gray-100">
           <Spin tip="正在智能标注中..." spinning={annotating}>
             <div

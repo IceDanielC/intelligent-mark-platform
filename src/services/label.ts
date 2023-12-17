@@ -13,8 +13,8 @@ export type LabelInfoSelf = {
 
 export type DatasetLabel = {
   color: string
-  datasetId: number
-  id: number
+  datasetId?: number
+  id?: number
   name: string
 }
 
@@ -44,3 +44,14 @@ export const getDatasetLabels = (datasetName: string, version: string) =>
 // 导出图片中的所有标签（YOLO格式）
 export const downloadLabelYOLO = (labels: YOLOLabel[]) =>
   request.post('/labelInfo/download/yolo', labels)
+
+// 新增标签
+export const addLabelGroup = (
+  datasetName: string,
+  version: string,
+  labelFormData: DatasetLabel
+) =>
+  request.post<any, ResData<string | null>>(
+    `/labelGroup/add/${datasetName}/${version}`,
+    labelFormData
+  )

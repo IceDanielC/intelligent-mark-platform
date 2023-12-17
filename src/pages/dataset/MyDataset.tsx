@@ -79,10 +79,26 @@ const MyDataset: React.FC = () => {
       render(_dom, dataset) {
         return (
           <div className="space-x-2">
-            <Button type="link" size="small">
-              查看
-            </Button>
-            <Button type="link" size="small">
+            {dataset.imgNumber > 0 ? (
+              <Button
+                type="link"
+                size="small"
+                onClick={() =>
+                  nav(
+                    `/manage/dataset/my-dataset/${dataset.name}/${dataset.version}/detail`
+                  )
+                }
+              >
+                查看
+              </Button>
+            ) : null}
+            <Button
+              type="link"
+              size="small"
+              onClick={() =>
+                nav(`/manage/dataset/my-dataset/${dataset.id}/import`)
+              }
+            >
               导入
             </Button>
             <Button
