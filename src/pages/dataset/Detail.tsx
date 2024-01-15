@@ -3,6 +3,7 @@ import { DatasetImage, deleteImage } from '@/services/image'
 import {
   DeleteOutlined,
   DownloadOutlined,
+  EditOutlined,
   ZoomInOutlined,
   ZoomOutOutlined
 } from '@ant-design/icons'
@@ -59,23 +60,32 @@ const DisplayImage: React.FC<{
           ) : (
             <span style={{ color: 'red' }}>未标注</span>
           )}
-          <Popconfirm
-            title="删除图片"
-            description="你确定要删除该图片吗"
-            onConfirm={async () => {
-              const res = await deleteImage(imgId)
-              if (res.code === 200) {
-                message.success('删除成功')
-                queryClient.invalidateQueries(['/dataset/images'])
-              } else {
-                message.error('删除失败')
-              }
-            }}
-            okText="确定"
-            cancelText="取消"
-          >
-            <DeleteOutlined className="ml-[80px] cursor-pointer" />
-          </Popconfirm>
+          <div style={{ display: 'inline-block', marginLeft: '70px' }}>
+            <EditOutlined
+              className="cursor-pointer"
+              onClick={() => {
+                // TODO edit 跳转到 标注界面
+                console.log(imgId, src)
+              }}
+            />
+            <Popconfirm
+              title="删除图片"
+              description="你确定要删除该图片吗"
+              onConfirm={async () => {
+                const res = await deleteImage(imgId)
+                if (res.code === 200) {
+                  message.success('删除成功')
+                  queryClient.invalidateQueries(['/dataset/images'])
+                } else {
+                  message.error('删除失败')
+                }
+              }}
+              okText="确定"
+              cancelText="取消"
+            >
+              <DeleteOutlined className="ml-2 cursor-pointer" />
+            </Popconfirm>
+          </div>
         </div>
       </div>
     </>

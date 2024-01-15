@@ -200,6 +200,13 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
                 />
               </ProForm.Item>
               <ProFormText
+                required
+                rules={[
+                  {
+                    required: true,
+                    message: '标签名称不能为空'
+                  }
+                ]}
                 width="md"
                 name="name"
                 label="标签名称"
