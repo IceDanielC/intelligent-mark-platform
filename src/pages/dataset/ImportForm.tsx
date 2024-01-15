@@ -116,8 +116,7 @@ const ImportForm: React.FC = () => {
                 <Upload
                   action="http://47.104.78.142:8085/minio/upload"
                   headers={{
-                    Authorization:
-                      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIxIiwiaWF0IjoxNzAyODA5OTUxLCJleHAiOjE3MDI4ODE5NTF9.dVae1gVdWH0kzmzOtVqLEFbvR6B-_njiJfYdoYA58hNZEYUZe1h5msWcyQ5u6LoTvBn1KEKbiu4lNWyRoNrZyw'
+                    Authorization: localStorage.getItem('minio/token') ?? ''
                   }}
                   listType="picture-card"
                   fileList={imageList}

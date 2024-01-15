@@ -4,7 +4,7 @@ import { Typography, Space, Form, Input, Button, message } from 'antd'
 import { UserAddOutlined } from '@ant-design/icons'
 import { useRequest } from 'ahooks'
 // import { MANAGE_INDEX_PATHNAME } from "../router";
-import { loginService } from '@/services/user'
+import { getMinioServerToken, loginService } from '@/services/user'
 import styles from './Login.module.scss'
 import request from '@/utils/request'
 import { useNavigate } from 'react-router-dom'
@@ -45,6 +45,7 @@ const Login: React.FC = () => {
   const { run: userLogin, loading } = useRequest(
     async (username: string, password: string) => {
       const data = await loginService(username, password)
+      await getMinioServerToken()
       return data
     },
     {

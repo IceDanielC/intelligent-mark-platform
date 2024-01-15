@@ -19,6 +19,12 @@ type OpenAPIRes = {
   results: LabelInfo[]
 }
 
+// 重新获取云检测API等access_token避免过期
+export const getAccessToken = () =>
+  request.post(
+    'https://aip.baidubce.com/oauth/2.0/token?grant_type=client_credentials&client_id=gTPUiooGN5zqexjNNNFK4znx&client_secret=yIOgFi9rpz7fUUVdfwjZ6BLX6zQOIAcU'
+  )
+
 // 百度云API
 export const detectImageUseOnlineModal = (url: string) =>
   request.post<any, OpenAPIRes>(
