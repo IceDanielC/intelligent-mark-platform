@@ -1,3 +1,9 @@
 .ant-spin {
   max-height: none !important;
 }
+
+.ant-table-tbody {
+  .ant-form-item {
+    margin-bottom: 0;
+  }
+}

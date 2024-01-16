@@ -1,8 +1,17 @@
-import { type Role, getRoleList, updateRole } from '@/services/role'
+import {
+  type Role,
+  getRoleList,
+  updateRole,
+  getMenuList
+} from '@/services/role'
 import React, { useRef, useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
-import { App, Button, Input, type InputRef, Popconfirm, Space, Tag } from 'antd'
-import { EditableProTable, type ProColumns } from '@ant-design/pro-components'
+import { App, Button, Input, Popconfirm, Space, Tag } from 'antd'
+import {
+  EditableProTable,
+  ProFormSelect,
+  type ProColumns
+} from '@ant-design/pro-components'
 
 const TagList: React.FC<{
   tags?: {
@@ -11,11 +20,11 @@ const TagList: React.FC<{
   }[]
   onChange?: (menus: string[]) => void
 }> = ({ tags, onChange }) => {
-  const ref = useRef<InputRef | null>(null)
   const [inputValue, setInputValue] = useState<string>('')
+  const { message } = App.useApp()
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(e.target.value)
+  const handleInputChange = (e: string) => {
+    setInputValue(e)
   }
 
   const handleInputConfirm = () => {
@@ -25,6 +34,9 @@ const TagList: React.FC<{
       tempsTags.filter((tag) => tag.label === inputValue).length === 0
     ) {
       tempsTags = [...tempsTags, { key: inputValue, label: inputValue }]
+    } else if (inputValue) {
+      message.warning(inputValue + ' 已存在')
+      return
     }
     onChange?.(tempsTags.map((menu) => menu.label))
     setInputValue('')
@@ -50,15 +62,18 @@ const TagList: React.FC<{
           </Tag>
         )
       })}
-      <Input
-        ref={ref}
-        type="text"
-        size="small"
-        style={{ width: 78 }}
-        value={inputValue}
+      <ProFormSelect
+        style={{ width: 110 }}
+        fieldProps={{
+          size: 'small',
+          onBlur: handleInputConfirm
+        }}
+        request={() =>
+          getMenuList().then((menus) =>
+            menus.map((menu) => ({ label: menu.description, value: menu.name }))
+          )
+        }
         onChange={handleInputChange}
-        onBlur={handleInputConfirm}
-        onPressEnter={handleInputConfirm}
       />
     </Space>
   )
