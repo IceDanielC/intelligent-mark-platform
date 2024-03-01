@@ -10,7 +10,7 @@ import {
   isImageAnnotate,
   unAnnotatedImagesFromDataset
 } from '@/services/image'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { LabelInfoSelf, YOLOLabel, saveLabelByImage } from '@/services/label'
 import LabelColumn from './LabelColumn'
 import { useLabelStore } from '@/store/useLabelStore'
@@ -44,8 +44,14 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
   const [imageLoading, setImageLoading] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const nav = useNavigate()
+  const [searchParams] = useSearchParams()
 
   const autosaveRef = useRef<any>(null)
+
+  // 首次挂载时
+  useEffect(() => {
+    setCurrentIndex(parseInt(searchParams.get('index') ?? '0'))
+  }, [])
 
   useEffect(() => {
     autosaveRef.current = images?.[currentIndex]

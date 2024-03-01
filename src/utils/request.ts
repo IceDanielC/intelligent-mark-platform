@@ -42,6 +42,9 @@ request.interceptors.response.use(
     } else if (response.data.code === 401) {
       // freshToken也过期了
       router.navigate('/')
+      localStorage.removeItem(ACCESS_TOKEN)
+      localStorage.removeItem(FRESH_TOKEN)
+      localStorage.removeItem('user/info')
       message.error('身份验证已失效，请重新登陆')
     } else {
       message.error(response.data.code + ': ' + response.data.msg)

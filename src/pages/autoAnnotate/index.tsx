@@ -3,13 +3,11 @@ import { Tabs } from 'antd'
 import type { TabsProps } from 'antd'
 import AnnotatedTabItem from './AnnotatedTabItem'
 import useImageQuery from '@/hooks/useImageQuery'
-
-// const onChange = (key: string) => {
-//   console.log(key)
-// }
+import { useSearchParams } from 'react-router-dom'
 
 const AutoAnnotate: React.FC = () => {
   const { allImages, annotatedImages, unAnnoImages } = useImageQuery()
+  const [_searchParams, setSearchParams] = useSearchParams()
 
   const items: TabsProps['items'] = [
     {
@@ -30,7 +28,12 @@ const AutoAnnotate: React.FC = () => {
   ]
 
   return (
-    <Tabs destroyInactiveTabPane={true} defaultActiveKey="1" items={items} />
+    <Tabs
+      destroyInactiveTabPane={true}
+      defaultActiveKey="1"
+      items={items}
+      onChange={() => setSearchParams('')}
+    />
   )
 }
 

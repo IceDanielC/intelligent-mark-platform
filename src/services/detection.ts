@@ -19,6 +19,9 @@ type OpenAPIRes = {
   results: LabelInfo[]
 }
 
+const ACCESS_TOKEN =
+  '24.97bfc75a8aa27bc67d608138f4997f6c.2592000.1710754013.282335-44973375'
+
 // 重新获取云检测API等access_token避免过期
 export const getAccessToken = () =>
   request.post(
@@ -28,6 +31,6 @@ export const getAccessToken = () =>
 // 百度云API
 export const detectImageUseOnlineModal = (url: string) =>
   request.post<any, OpenAPIRes>(
-    '/zw_disease?input_type=url&access_token=24.97e67cba58ac97a392580ce2266070b3.2592000.1707883363.282335-44973375',
-    { url, threshold: 0.4 }
+    `/zw_disease?input_type=url&access_token=${ACCESS_TOKEN}`,
+    { url, threshold: 0.7 }
   )

@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons'
 import { Image, Popconfirm, Space, Tabs, TabsProps, App } from 'antd'
 import LabelColumn from '../autoAnnotate/LabelColumn'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const onDownload = (src: string, imageName: string) => {
   fetch(src)
@@ -30,9 +31,12 @@ const DisplayImage: React.FC<{
   imageName: string
   isAnnotated: boolean
   imgId: number
-}> = ({ src, imageName, isAnnotated, imgId }) => {
+  index: number
+}> = ({ src, imageName, isAnnotated, imgId, index }) => {
   const { message } = App.useApp()
   const { queryClient } = useImageQuery()
+  const nav = useNavigate()
+  const { dataset, version } = useParams()
 
   return (
     <>
@@ -64,8 +68,10 @@ const DisplayImage: React.FC<{
             <EditOutlined
               className="cursor-pointer"
               onClick={() => {
-                // TODO edit 跳转到 标注界面
-                console.log(imgId, src)
+                // edit 跳转到 标注界面
+                nav(
+                  `/manage/auto-annotate/detail/${dataset}/${version}?index=${index}`
+                )
               }}
             />
             <Popconfirm
@@ -99,13 +105,14 @@ const Detail: React.FC<{ images: DatasetImage[] }> = ({ images }) => {
         className="flex flex-wrap w-[58vw] h-[70vh] 
       overflow-auto border border-solid border-slate-300"
       >
-        {images.map((image) => (
+        {images.map((image, index) => (
           <DisplayImage
             key={image.id}
             imgId={image.id as number}
             src={image.url}
             imageName={image.name}
             isAnnotated={image.isAnnotate === 'true'}
+            index={index}
           />
         ))}
       </div>
