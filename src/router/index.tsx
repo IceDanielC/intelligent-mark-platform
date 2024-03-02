@@ -20,6 +20,8 @@ const DatasetSelect = lazy(() => import('@/pages/autoAnnotate/DatasetSelect'))
 const MyDataset = lazy(() => import('@/pages/dataset/MyDataset'))
 const ImportForm = lazy(() => import('@/pages/dataset/ImportForm'))
 const Detail = lazy(() => import('@/pages/dataset/Detail'))
+const GroupManage = lazy(() => import('@/pages/LabelGroup/GroupManage'))
+const NewDataset = lazy(() => import('@/pages/dataset/NewDataset'))
 
 const homeLoader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
@@ -94,12 +96,20 @@ const routes = [
         element: <Detail />
       },
       {
+        path: 'dataset/create',
+        element: <NewDataset />
+      },
+      {
         path: 'auto-annotate/dataset-select',
         element: <DatasetSelect />
       },
       {
         path: 'auto-annotate/detail/:dataset/:version',
         element: <AutoAnnotate />
+      },
+      {
+        path: 'label-group/management',
+        element: <GroupManage />
       }
     ]
   },

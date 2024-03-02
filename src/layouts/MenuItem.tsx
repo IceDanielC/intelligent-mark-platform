@@ -2,6 +2,7 @@ import {
   DashboardOutlined,
   DatabaseOutlined,
   ExpandOutlined,
+  TagsOutlined,
   UploadOutlined,
   UserOutlined
 } from '@ant-design/icons'
@@ -36,6 +37,21 @@ export const menuItems = [
       {
         key: 'my-dataset',
         label: <NavLink to="/manage/dataset/my-dataset">我的数据集</NavLink>
+      },
+      {
+        key: 'create',
+        label: <NavLink to="/manage/dataset/create">创建数据集</NavLink>
+      }
+    ]
+  },
+  {
+    key: 'label-group',
+    label: '标签组管理',
+    icon: <TagsOutlined />,
+    children: [
+      {
+        key: 'management',
+        label: <NavLink to="/manage/label-group/management">我的标签组</NavLink>
       }
     ]
   },

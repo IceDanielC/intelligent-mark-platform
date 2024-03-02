@@ -9,6 +9,8 @@ export type Dataset = {
   version: string
   imgNumber: number
   annotatedNumber: number
+  module: string
+  savePlace: string
 }
 
 export type DatasetPage = {
@@ -34,3 +36,7 @@ export const getDatasetPagesByUser = (
   request.get<any, ResData<DatasetPage>>(
     `/dataset/user/page?username=${username}&current=${current}&size=${size}&nameKeyword=${nameKeyword}`
   )
+
+// 新增数据集
+export const createDataset = (dataset: Dataset) =>
+  request.post<any, ResData<boolean>>('/dataset/create', dataset)

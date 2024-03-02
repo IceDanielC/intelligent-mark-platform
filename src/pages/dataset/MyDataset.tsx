@@ -42,12 +42,12 @@ const MyDataset: React.FC = () => {
       title: 'ID',
       dataIndex: 'id',
       hideInSearch: true,
-      fixed: 'left',
       hideInTable: true
     },
     {
       title: '数据集名称',
       dataIndex: 'name',
+      fixed: 'left',
       width: 250
     },
     {
@@ -59,12 +59,14 @@ const MyDataset: React.FC = () => {
     {
       title: '标注类型',
       dataIndex: 'annotateType',
-      hideInSearch: true
+      hideInSearch: true,
+      width: 200
     },
     {
       title: '数据量',
       dataIndex: 'imgNumber',
-      hideInSearch: true
+      hideInSearch: true,
+      width: 70
     },
     {
       title: '标注情况',
@@ -77,7 +79,20 @@ const MyDataset: React.FC = () => {
               : dataset.annotatedNumber / dataset.imgNumber) * 100
           )}% (${dataset.annotatedNumber}/${dataset.imgNumber})`}</span>
         )
-      }
+      },
+      width: 150
+    },
+    {
+      title: '标注模版',
+      hideInSearch: true,
+      dataIndex: 'module',
+      width: 120
+    },
+    {
+      title: '存储平台',
+      hideInSearch: true,
+      dataIndex: 'savePlace',
+      width: 150
     },
     {
       key: 'actions',
@@ -121,6 +136,17 @@ const MyDataset: React.FC = () => {
             >
               标注
             </Button>
+            {dataset.version === 'V1' ? (
+              <Button
+                type="link"
+                size="small"
+                onClick={() => {
+                  console.log(123)
+                }}
+              >
+                新增版本
+              </Button>
+            ) : null}
             <Button type="link" size="small" danger>
               删除
             </Button>
@@ -167,9 +193,7 @@ const MyDataset: React.FC = () => {
         <Button
           type="primary"
           icon={<GroupOutlined />}
-          onClick={() => {
-            console.log('新增数据集')
-          }}
+          onClick={() => nav('/manage/dataset/create')}
         >
           新建数据集
         </Button>
