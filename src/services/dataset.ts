@@ -11,6 +11,7 @@ export type Dataset = {
   annotatedNumber: number
   module: string
   savePlace: string
+  createTime: string
 }
 
 export type DatasetPage = {
@@ -40,3 +41,7 @@ export const getDatasetPagesByUser = (
 // 新增数据集
 export const createDataset = (dataset: Dataset) =>
   request.post<any, ResData<boolean>>('/dataset/create', dataset)
+
+// 删除数据集
+export const deleteDataset = (datasetId: number) =>
+  request.delete<any, ResData<string>>(`/dataset/delete/${datasetId}`)

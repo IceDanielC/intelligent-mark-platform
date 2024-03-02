@@ -1,12 +1,16 @@
 import { useAntdResizableHeader } from '@minko-fe/use-antd-resizable-header'
-import { GroupOutlined } from '@ant-design/icons'
+import { ClockCircleOutlined, GroupOutlined } from '@ant-design/icons'
 import { ProColumns, ProTable } from '@ant-design/pro-components'
-import { Button } from 'antd'
+import { Button, Popconfirm, Tag, message } from 'antd'
 import { useQuery, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 
 import useSearchParams from '@/hooks/useSearchParams'
-import { Dataset, getDatasetPagesByUser } from '@/services/dataset'
+import {
+  Dataset,
+  deleteDataset,
+  getDatasetPagesByUser
+} from '@/services/dataset'
 import { useMemo } from 'react'
 
 const MyDataset: React.FC = () => {
@@ -95,6 +99,20 @@ const MyDataset: React.FC = () => {
       width: 150
     },
     {
+      title: '创建时间',
+      hideInSearch: true,
+      dataIndex: 'createTime',
+      width: 150,
+      sorter: (a, b) => Date.parse(a.createTime) - Date.parse(b.createTime),
+      render(_dom, dataset) {
+        return (
+          <Tag icon={<ClockCircleOutlined />} color="processing">
+            {dataset.createTime}
+          </Tag>
+        )
+      }
+    },
+    {
       key: 'actions',
       title: '操作',
       hideInSearch: true,
@@ -141,15 +159,31 @@ const MyDataset: React.FC = () => {
                 type="link"
                 size="small"
                 onClick={() => {
-                  console.log(123)
+                  console.log('新增版本')
                 }}
               >
                 新增版本
               </Button>
             ) : null}
-            <Button type="link" size="small" danger>
-              删除
-            </Button>
+            <Popconfirm
+              title="删除数据集"
+              description={`你确定要删除${dataset.name}吗?`}
+              onConfirm={async () => {
+                const res = await deleteDataset(dataset.id)
+                if (res.code === 200) {
+                  message.success('删除成功')
+                  queryClient.invalidateQueries(['/dataset/user/page'])
+                } else {
+                  message.error('删除失败')
+                }
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="link" size="small" danger>
+                删除
+              </Button>
+            </Popconfirm>
           </div>
         )
       }
