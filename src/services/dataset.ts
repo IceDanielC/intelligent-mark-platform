@@ -28,8 +28,9 @@ export const getDatasetsByUser = (username: string) =>
 export const getDatasetPagesByUser = (
   username: string,
   current = 1,
-  size = 10
+  size = 4,
+  nameKeyword = ''
 ) =>
   request.get<any, ResData<DatasetPage>>(
-    `/dataset/user/page?username=${username}&current=${current}&size=${size}`
+    `/dataset/user/page?username=${username}&current=${current}&size=${size}&nameKeyword=${nameKeyword}`
   )

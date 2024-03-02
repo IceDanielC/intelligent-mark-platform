@@ -7,10 +7,12 @@ import { useNavigate } from 'react-router-dom'
 
 import useSearchParams from '@/hooks/useSearchParams'
 import { Dataset, getDatasetPagesByUser } from '@/services/dataset'
+import { useMemo } from 'react'
 
 const MyDataset: React.FC = () => {
   const queryClient = useQueryClient()
-  const [_searchParams, setSearchParams] = useSearchParams<any>()
+  const [searchParams, setSearchParams] = useSearchParams<any>()
+  const PAGE_SIZE = 5
   const nav = useNavigate()
 
   const {
@@ -19,11 +21,18 @@ const MyDataset: React.FC = () => {
     isLoading,
     isPreviousData
   } = useQuery({
-    queryKey: ['/dataset/user/page'],
+    queryKey: [
+      '/dataset/user/page',
+      searchParams?.current,
+      searchParams?.nameKeyword
+    ],
     queryFn: () =>
-      getDatasetPagesByUser(localStorage.getItem('user/info') as string).then(
-        (res) => res.data
-      ),
+      getDatasetPagesByUser(
+        localStorage.getItem('user/info') as string,
+        searchParams?.current ?? 1,
+        PAGE_SIZE,
+        searchParams?.nameKeyword ?? ''
+      ).then((res) => res.data),
     keepPreviousData: true
   })
 
@@ -123,7 +132,7 @@ const MyDataset: React.FC = () => {
 
   const { resizableColumns, components, tableWidth } = useAntdResizableHeader({
     /** @ts-ignore */
-    columns,
+    columns: useMemo(() => columns, []), // 如果columns定义在组件内，必须使用useMemo
     minConstraints: 50,
     columnsState: {
       persistenceKey: 'table/widths/dataset',
@@ -145,6 +154,12 @@ const MyDataset: React.FC = () => {
       dataSource={datasetsPage?.records ?? []}
       loading={isLoading || (isFetching && isPreviousData)}
       onReset={() => setSearchParams({})}
+      onSubmit={(params) =>
+        setSearchParams((prev) => ({
+          ...prev,
+          nameKeyword: `${params.name ?? ''}`
+        }))
+      }
       rowKey="id"
       form={{ span: 6 }}
       cardProps={{ title: '数据集总览', bordered: true }}
@@ -166,13 +181,13 @@ const MyDataset: React.FC = () => {
       scroll={{ x: tableWidth }}
       search={{ labelWidth: 'auto' }}
       pagination={{
-        current: datasetsPage?.current,
+        current: parseInt(searchParams?.current ?? 1),
         total: datasetsPage?.total,
-        pageSize: 10,
+        pageSize: PAGE_SIZE,
         showQuickJumper: true,
         showSizeChanger: false,
         onChange: (page) =>
-          setSearchParams((prev) => ({ ...prev, page: `${page}` }))
+          setSearchParams((prev) => ({ ...prev, current: `${page}` }))
       }}
     />
   )
