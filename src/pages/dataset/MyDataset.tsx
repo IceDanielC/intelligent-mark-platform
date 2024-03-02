@@ -1,7 +1,7 @@
 import { useAntdResizableHeader } from '@minko-fe/use-antd-resizable-header'
 import { ClockCircleOutlined, GroupOutlined } from '@ant-design/icons'
 import { ProColumns, ProTable } from '@ant-design/pro-components'
-import { Button, Popconfirm, Tag, message } from 'antd'
+import { Badge, Button, Popconfirm, Tag, message } from 'antd'
 import { useQuery, useQueryClient } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 
@@ -12,6 +12,14 @@ import {
   getDatasetPagesByUser
 } from '@/services/dataset'
 import { useMemo } from 'react'
+
+function getAnnotateRate(dataset: Dataset): number {
+  return Math.round(
+    (Number.isNaN(dataset.annotatedNumber / dataset.imgNumber)
+      ? 0
+      : dataset.annotatedNumber / dataset.imgNumber) * 100
+  )
+}
 
 const MyDataset: React.FC = () => {
   const queryClient = useQueryClient()
@@ -76,12 +84,20 @@ const MyDataset: React.FC = () => {
       title: '标注情况',
       hideInSearch: true,
       render(_dom, dataset) {
-        return (
-          <span>{`${Math.round(
-            (Number.isNaN(dataset.annotatedNumber / dataset.imgNumber)
-              ? 0
-              : dataset.annotatedNumber / dataset.imgNumber) * 100
-          )}% (${dataset.annotatedNumber}/${dataset.imgNumber})`}</span>
+        return getAnnotateRate(dataset) === 100 ? (
+          <Badge
+            status="success"
+            text={`${getAnnotateRate(dataset)}% (${dataset.annotatedNumber}/${
+              dataset.imgNumber
+            })`}
+          ></Badge>
+        ) : (
+          <Badge
+            status="processing"
+            text={`${getAnnotateRate(dataset)}% (${dataset.annotatedNumber}/${
+              dataset.imgNumber
+            })`}
+          ></Badge>
         )
       },
       width: 150
