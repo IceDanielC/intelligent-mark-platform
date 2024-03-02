@@ -12,6 +12,7 @@ export type Dataset = {
   module: string
   savePlace: string
   createTime: string
+  size: number
 }
 
 export type DatasetPage = {

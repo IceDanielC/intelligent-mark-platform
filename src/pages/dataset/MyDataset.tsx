@@ -12,6 +12,7 @@ import {
   getDatasetPagesByUser
 } from '@/services/dataset'
 import { useMemo } from 'react'
+import { convertBytesToSize } from '@/utils/convert'
 
 function getAnnotateRate(dataset: Dataset): number {
   return Math.round(
@@ -79,6 +80,15 @@ const MyDataset: React.FC = () => {
       dataIndex: 'imgNumber',
       hideInSearch: true,
       width: 70
+    },
+    {
+      title: '数据集大小',
+      dataIndex: 'size',
+      hideInSearch: true,
+      width: 170,
+      render(_dom, dataset) {
+        return <span>{convertBytesToSize(dataset.size)}</span>
+      }
     },
     {
       title: '标注情况',
