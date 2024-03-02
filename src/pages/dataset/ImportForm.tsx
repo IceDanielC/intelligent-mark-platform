@@ -67,7 +67,8 @@ const ImportForm: React.FC = () => {
                 datasetId: Number.parseInt(datasetId as string),
                 isAnnotate: 'false',
                 name: image.name,
-                isValidated: 'true'
+                isValidated: 'true',
+                size: image.size as number
               }))
               const res = await uploadImages(images)
               if (res.code === 200) {

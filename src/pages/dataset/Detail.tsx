@@ -10,6 +10,7 @@ import {
 import { Image, Popconfirm, Space, Tabs, TabsProps, App } from 'antd'
 import LabelColumn from '../autoAnnotate/LabelColumn'
 import { useNavigate, useParams } from 'react-router-dom'
+import { convertBytesToSize } from '@/utils/convert'
 
 const onDownload = (src: string, imageName: string) => {
   fetch(src)
@@ -32,7 +33,8 @@ const DisplayImage: React.FC<{
   isAnnotated: boolean
   imgId: number
   index: number
-}> = ({ src, imageName, isAnnotated, imgId, index }) => {
+  size: number
+}> = ({ src, imageName, isAnnotated, imgId, index, size }) => {
   const { message } = App.useApp()
   const { queryClient } = useImageQuery()
   const nav = useNavigate()
@@ -58,12 +60,13 @@ const DisplayImage: React.FC<{
             )
           }}
         />
-        <div className="bg-[#efefef] w-[150px] h-[30px] text-xs pt-2 pl-2">
+        <div className="bg-[#efefef] w-[150px] h-[30px] text-xs pt-2 pl-2 relative">
           {isAnnotated ? (
             '已标注'
           ) : (
             <span style={{ color: 'red' }}>未标注</span>
           )}
+          <span className="absolute ml-2">{convertBytesToSize(size)}</span>
           <div style={{ display: 'inline-block', marginLeft: '70px' }}>
             <EditOutlined
               className="cursor-pointer"
@@ -113,6 +116,7 @@ const Detail: React.FC<{ images: DatasetImage[] }> = ({ images }) => {
             imageName={image.name}
             isAnnotated={image.isAnnotate === 'true'}
             index={index}
+            size={image.size}
           />
         ))}
       </div>

@@ -7,6 +7,7 @@ export type DatasetImage = {
   isValidated: string
   name: string
   url: string
+  size: number
 }
 
 // 图片是否标注
