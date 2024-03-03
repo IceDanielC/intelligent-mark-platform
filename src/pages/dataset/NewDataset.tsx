@@ -68,6 +68,10 @@ const NewDataset: React.FC = () => {
               params.username = localStorage.getItem('user/info')!
               const res = await createDataset(params)
               console.log(res)
+              if (res.code === 405) {
+                message.warning('数据集名称已存在')
+                return false
+              }
               message.success('创建数据集成功')
               nav('/manage/dataset/my-dataset')
             }}

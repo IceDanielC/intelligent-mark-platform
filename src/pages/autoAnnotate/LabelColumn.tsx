@@ -1,4 +1,9 @@
-import { DatasetLabel, addLabelGroup, getDatasetLabels } from '@/services/label'
+import {
+  DatasetLabel,
+  addLabelGroup,
+  deleteDatasetLabel,
+  getDatasetLabels
+} from '@/services/label'
 import { useLabelStore } from '@/store/useLabelStore'
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons'
 import { ModalForm, ProForm, ProFormText } from '@ant-design/pro-components'
@@ -9,26 +14,41 @@ import {
   Divider,
   Dropdown,
   MenuProps,
+  Popconfirm,
   message
 } from 'antd'
 import { useQuery, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
 
-const items: MenuProps['items'] = [
-  {
-    key: 'delete',
-    label: (
-      <Button size="small" type="link" danger>
-        删除标签
-      </Button>
-    )
-  }
-]
-
 const DatasetLabelItem: React.FC<{
   label: DatasetLabel
   onClick: (item: DatasetLabel) => void
 }> = ({ label, onClick }) => {
+  const queryClient = useQueryClient()
+
+  const items: MenuProps['items'] = [
+    {
+      key: 'delete',
+      label: (
+        <Popconfirm
+          title="删除标签"
+          description={`你确定要删除标签${label.name}?`}
+          onConfirm={async () => {
+            await deleteDatasetLabel(label.id!)
+            message.success('删除成功')
+            queryClient.invalidateQueries(['/labelGroup/dataset'])
+          }}
+          okText="Yes"
+          cancelText="No"
+        >
+          <Button size="small" type="link" danger>
+            删除标签
+          </Button>
+        </Popconfirm>
+      )
+    }
+  ]
+
   return (
     <div
       className="h-10 border border-slate-300 hover:border-[#1677ff]
@@ -70,11 +90,11 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
   })
 
   const handleLabelClick = (item: DatasetLabel) => {
-    const uuid = labelImageRef.current
+    const uuid = labelImageRef?.current
       .getImageLabel()
       .current.activeLabel()?.uuid
 
-    labelImageRef.current
+    labelImageRef?.current
       .getImageLabel()
       .current.setLabelByUuid(uuid, { name: item.name, color: item.color })
   }
@@ -94,10 +114,17 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
                 添加标签
               </Button>
             }
+            modalProps={{
+              destroyOnClose: true
+            }}
             onFinish={async (values: any) => {
+              if (!values.color) {
+                message.warning('不能使用默认颜色')
+                return
+              }
               const labelData = {
                 name: values.name,
-                color: values.color.metaColor.originalInput
+                color: values.color.toHexString()
               }
               const res = await addLabelGroup(
                 dataset as string,

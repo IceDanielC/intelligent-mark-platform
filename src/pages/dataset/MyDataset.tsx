@@ -13,6 +13,7 @@ import {
 } from '@/services/dataset'
 import { useMemo } from 'react'
 import { convertBytesToSize } from '@/utils/convert'
+import NewVersionModal from './NewVersionModal'
 
 function getAnnotateRate(dataset: Dataset): number {
   return Math.round(
@@ -181,15 +182,7 @@ const MyDataset: React.FC = () => {
               标注
             </Button>
             {dataset.version === 'V1' ? (
-              <Button
-                type="link"
-                size="small"
-                onClick={() => {
-                  console.log('新增版本')
-                }}
-              >
-                新增版本
-              </Button>
+              <NewVersionModal dataset={dataset} />
             ) : null}
             <Popconfirm
               title="删除数据集"

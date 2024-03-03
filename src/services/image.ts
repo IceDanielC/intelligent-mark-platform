@@ -11,12 +11,28 @@ export type DatasetImage = {
 }
 
 // 图片是否标注
-export const isImageAnnotate = (imageUrl: string) =>
-  request.get<any, ResData<boolean>>('/image/isAnnotated?imageUrl=' + imageUrl)
+export const isImageAnnotate = (
+  imageUrl: string,
+  datasetName: string,
+  version: string
+) =>
+  request.get<any, ResData<boolean>>(
+    `/image/isAnnotated?imageUrl=${imageUrl}&username=${localStorage.getItem(
+      'user/info'
+    )}&datasetName=${datasetName}&version=${version}`
+  )
 
 // 是否为有效数据
-export const isValidated = (imageUrl: string) =>
-  request.get<any, ResData<boolean>>('/image/isValidated?imageUrl=' + imageUrl)
+export const isValidated = (
+  imageUrl: string,
+  datasetName: string,
+  version: string
+) =>
+  request.get<any, ResData<boolean>>(
+    `/image/isValidated?imageUrl=${imageUrl}&username=${localStorage.getItem(
+      'user/info'
+    )}&datasetName=${datasetName}&version=${version}`
+  )
 
 //通过数据集获取images
 export const imagesFromDataset = (datasetName: string, version: string) =>

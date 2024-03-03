@@ -125,7 +125,11 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
   const { data: isImageAnnotated } = useQuery({
     queryKey: ['/image/isAnnotated', currentIndex],
     queryFn: () =>
-      isImageAnnotate(imageList[currentIndex]).then((res) => res.data),
+      isImageAnnotate(
+        imageList[currentIndex],
+        dataset as string,
+        version as string
+      ).then((res) => res.data),
     enabled: imageList[currentIndex] !== undefined
   })
 

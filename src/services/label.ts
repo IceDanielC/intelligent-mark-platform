@@ -26,9 +26,15 @@ export type YOLOLabel = {
   height: number
 }
 
-export const getLabelsByImage = (imageUrl: string) =>
+export const getLabelsByImage = (
+  imageUrl: string,
+  datasetName: string,
+  version: string
+) =>
   request.get<any, ResData<LabelInfoSelf[]>>(
-    '/labelInfo/imageLabels?imageUrl=' + imageUrl
+    `/labelInfo/imageLabels?imageUrl=${imageUrl}&username=${localStorage.getItem(
+      'user/info'
+    )}&datasetName=${datasetName}&version=${version}`
   )
 
 // 保存每个id图片的所有标签
@@ -55,3 +61,7 @@ export const addLabelGroup = (
     `/labelGroup/add/${datasetName}/${version}`,
     labelFormData
   )
+
+// 删除标签
+export const deleteDatasetLabel = (labelId: number) =>
+  request.delete(`/labelGroup/delete/${labelId}`)

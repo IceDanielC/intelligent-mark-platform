@@ -37,7 +37,10 @@ const ImageLabelComponent: React.FC<{
 
     const { data: labelsFromServer } = useQuery({
       queryKey: ['/labelInfo/imageLabels', imageUrl],
-      queryFn: () => getLabelsByImage(imageUrl).then((res) => res.data)
+      queryFn: () =>
+        getLabelsByImage(imageUrl, dataset as string, version as string).then(
+          (res) => res.data
+        )
     })
 
     const { data: savedLabels } = useQuery({

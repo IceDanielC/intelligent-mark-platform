@@ -46,3 +46,17 @@ export const createDataset = (dataset: Dataset) =>
 // 删除数据集
 export const deleteDataset = (datasetId: number) =>
   request.delete<any, ResData<string>>(`/dataset/delete/${datasetId}`)
+
+export const getDatasetNewVersion = (datasetName: string) =>
+  request.get<any, ResData<string>>(`/dataset/latestVersion/${datasetName}`)
+
+// 新增数据集版本
+export const createDatasetVersion = (
+  dataset: Dataset,
+  isExtends: boolean,
+  historyVersion: string
+) =>
+  request.post(
+    `/dataset/newVersion?extends=${isExtends}&historyVersion=${historyVersion}`,
+    dataset
+  )
