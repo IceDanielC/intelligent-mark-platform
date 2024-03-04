@@ -2,6 +2,7 @@ import {
   DashboardOutlined,
   DatabaseOutlined,
   ExpandOutlined,
+  OneToOneOutlined,
   TagsOutlined,
   UploadOutlined,
   UserOutlined
@@ -61,6 +62,15 @@ export const menuItems = [
     label: (
       <NavLink to="/manage/auto-annotate/dataset-select">
         病虫害自动化标注
+      </NavLink>
+    )
+  },
+  {
+    key: 'high-precision-detection',
+    icon: <OneToOneOutlined />,
+    label: (
+      <NavLink to="/manage/high-precision-detection/index">
+        病虫害高精度检测
       </NavLink>
     )
   },
