@@ -19,3 +19,7 @@ export const updateRole = (role: Role) =>
 
 export const getMenuList = () =>
   request.get<any, ResData<Menu[]>>('/menu/list').then((res) => res.data)
+
+// 获取权限菜单
+export const getRoleMenus = (username: string) =>
+  request.get<any, ResData<string>>(`/role/menus/${username}`)

@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react'
+import React, { Suspense, useEffect, useState } from 'react'
 import {
   Layout,
   Menu,
@@ -14,6 +14,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 
 import { menuItems } from './MenuItem'
 import { LogoutOutlined, UserOutlined } from '@ant-design/icons'
+import { useMenuStore } from '@/store/useMenuStore'
 
 const { Sider, Content, Footer } = Layout
 
@@ -74,6 +75,11 @@ const ManageLayout: React.FC = () => {
     token: { colorBgContainer }
   } = theme.useToken()
   const location = useLocation()
+  const { menus, fetchMenus } = useMenuStore()
+
+  useEffect(() => {
+    fetchMenus()
+  }, [])
 
   function getSeletedKeys() {
     return location.pathname.slice(8).split('/')
@@ -106,7 +112,7 @@ const ManageLayout: React.FC = () => {
           theme="dark"
           mode="inline"
           selectedKeys={getSeletedKeys()}
-          items={menuItems}
+          items={menuItems.filter((item) => menus.includes(item.key))}
         />
       </Sider>
       <Layout style={{ marginLeft: collapsed ? 80 : 200 }}>
