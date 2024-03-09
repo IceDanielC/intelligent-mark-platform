@@ -22,7 +22,7 @@ const ImportForm = lazy(() => import('@/pages/dataset/ImportForm'))
 const Detail = lazy(() => import('@/pages/dataset/Detail'))
 const GroupManage = lazy(() => import('@/pages/LabelGroup/GroupManage'))
 const NewDataset = lazy(() => import('@/pages/dataset/NewDataset'))
-const HighPrecisionDetection = lazy(() => import('@/pages/detection'))
+const HighProcisionDetect = lazy(() => import('@/pages/detection'))
 
 const homeLoader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
@@ -114,7 +114,11 @@ const routes = [
       },
       {
         path: 'high-precision-detection/index',
-        element: <HighPrecisionDetection />
+        element: <DatasetSelect />
+      },
+      {
+        path: 'high-precision-detection/detail/:dataset/:version',
+        element: <HighProcisionDetect />
       }
     ]
   },

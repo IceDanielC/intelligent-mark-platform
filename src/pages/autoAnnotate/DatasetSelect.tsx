@@ -38,7 +38,13 @@ export default () => {
   const options = prehandleDataset(datasets)
 
   const handleSelect = (value: any[]) => {
-    navigator(`/manage/auto-annotate/detail/${value[0]}/${value[1]}`)
+    if (window.location.pathname.includes('high-precision-detection')) {
+      navigator(
+        `/manage/high-precision-detection/detail/${value[0]}/${value[1]}`
+      )
+    } else {
+      navigator(`/manage/auto-annotate/detail/${value[0]}/${value[1]}`)
+    }
   }
 
   return (
