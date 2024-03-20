@@ -47,6 +47,36 @@ const ImportForm: React.FC = () => {
     setImageList(newFileList)
   }
 
+  // 上传前预处理
+  const preHandle = (file: UploadFile) => {
+    if (file.size! < 1024 * 1024) return
+    // 当图片大小大于1MB时启用压缩
+    return new Promise<Blob>((resolve) => {
+      const reader = new FileReader()
+      reader.readAsDataURL(file as unknown as Blob)
+      reader.onload = () => {
+        const img = document.createElement('img')
+        // reader.result是图片转换成base64的结果
+        img.src = reader.result as string
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          canvas.width = img.naturalWidth
+          canvas.height = img.naturalHeight
+          const ctx = canvas.getContext('2d')!
+          ctx.drawImage(img, 0, 0)
+          // 添加水印
+          // ctx.fillStyle = 'red'
+          // ctx.textBaseline = 'middle'
+          // ctx.font = '33px Arial'
+          // ctx.fillText('Ant Design', 20, 20)
+
+          // 图片压缩：toBlob的第三个参数
+          canvas.toBlob((result) => resolve(result as Blob), 'image/jpeg', 0.2)
+        }
+      }
+    })
+  }
+
   const uploadButton = (
     <div>
       <PlusOutlined />
@@ -123,6 +153,7 @@ const ImportForm: React.FC = () => {
                   fileList={imageList}
                   onPreview={handlePreview}
                   onChange={handleChange}
+                  beforeUpload={preHandle}
                   multiple={true}
                   className="mb-4"
                 >
