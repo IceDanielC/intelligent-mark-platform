@@ -48,12 +48,12 @@ const ImportForm: React.FC = () => {
   }
 
   // 上传前预处理
-  const preHandle = (file: UploadFile) => {
+  const preHandle = (file: RcFile): Promise<Blob> | undefined => {
     if (file.size! < 1024 * 1024) return
     // 当图片大小大于1MB时启用压缩
     return new Promise<Blob>((resolve) => {
       const reader = new FileReader()
-      reader.readAsDataURL(file as unknown as Blob)
+      reader.readAsDataURL(file)
       reader.onload = () => {
         const img = document.createElement('img')
         // reader.result是图片转换成base64的结果
