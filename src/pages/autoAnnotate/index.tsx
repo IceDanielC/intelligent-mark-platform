@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Tabs } from 'antd'
 import type { TabsProps } from 'antd'
 import AnnotatedTabItem from './AnnotatedTabItem'
@@ -8,6 +8,7 @@ import { useSearchParams } from 'react-router-dom'
 const AutoAnnotate: React.FC = () => {
   const { allImages, annotatedImages, unAnnoImages } = useImageQuery()
   const [_searchParams, setSearchParams] = useSearchParams()
+  const [tabKey, setTabKey] = useState('1')
 
   const items: TabsProps['items'] = [
     {
@@ -30,9 +31,19 @@ const AutoAnnotate: React.FC = () => {
   return (
     <Tabs
       destroyInactiveTabPane={true}
-      defaultActiveKey="1"
+      activeKey={tabKey}
       items={items}
-      onChange={() => setSearchParams('')}
+      onChange={(key) => {
+        setSearchParams('')
+        if (key === '2' && annotatedImages.length === 0) {
+          setTabKey('1')
+          return
+        } else if (key === '3' && unAnnoImages.length === 0) {
+          setTabKey('1')
+          return
+        }
+        setTabKey(key)
+      }}
     />
   )
 }

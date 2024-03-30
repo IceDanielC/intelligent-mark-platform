@@ -23,6 +23,7 @@ const Detail = lazy(() => import('@/pages/dataset/Detail'))
 const GroupManage = lazy(() => import('@/pages/LabelGroup/GroupManage'))
 const NewDataset = lazy(() => import('@/pages/dataset/NewDataset'))
 const HighProcisionDetect = lazy(() => import('@/pages/detection'))
+const GroupLabelList = lazy(() => import('@/pages/LabelGroup/GroupLabelList'))
 
 const homeLoader: LoaderFunction = async ({ request }) => {
   const url = new URL(request.url)
@@ -111,6 +112,10 @@ const routes = [
       {
         path: 'label-group/management',
         element: <GroupManage />
+      },
+      {
+        path: 'label-group/list/:groupId',
+        element: <GroupLabelList />
       },
       {
         path: 'high-precision-detection/index',

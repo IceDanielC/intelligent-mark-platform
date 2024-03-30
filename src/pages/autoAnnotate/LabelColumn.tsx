@@ -1,9 +1,11 @@
+import { mergeLabelGroup } from '@/services/dataset'
 import {
   DatasetLabel,
   addLabelGroup,
   deleteDatasetLabel,
   getDatasetLabels
 } from '@/services/label'
+import { getListByUsername } from '@/services/userLabel'
 import { useLabelStore } from '@/store/useLabelStore'
 import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons'
 import { ModalForm, ProForm, ProFormText } from '@ant-design/pro-components'
@@ -14,9 +16,13 @@ import {
   Divider,
   Dropdown,
   MenuProps,
+  Modal,
   Popconfirm,
+  Select,
+  Space,
   message
 } from 'antd'
+import { useState } from 'react'
 import { useQuery, useQueryClient } from 'react-query'
 import { useParams } from 'react-router-dom'
 
@@ -73,9 +79,69 @@ const DatasetLabelItem: React.FC<{
   )
 }
 
+const AddGroupModal: React.FC<{
+  modalOpen: boolean
+  setModalOpen: (b: boolean) => void
+  datasetName: string
+  datasetVersion: string
+}> = ({ modalOpen, setModalOpen, datasetName, datasetVersion }) => {
+  const username = localStorage.getItem('user/info')
+  const [groupName, setGroupName] = useState<string | undefined>(undefined)
+  const queryClient = useQueryClient()
+
+  const { data: labelGroupList } = useQuery({
+    queryKey: ['/userLabel/options', username],
+    queryFn: () => getListByUsername(username as string).then((res) => res.data)
+  })
+
+  return (
+    <Modal
+      title="导入标签组"
+      open={modalOpen}
+      onCancel={() => {
+        setModalOpen(false)
+        setGroupName(undefined)
+      }}
+      onOk={async () => {
+        if (!groupName) {
+          message.warning('请选择一个标签组')
+          return false
+        } else {
+          const res: any = await mergeLabelGroup(
+            username!,
+            datasetName,
+            datasetVersion,
+            groupName
+          )
+          if (res.code === 200) {
+            queryClient.invalidateQueries(['/labelGroup/dataset'])
+            message.success('导入成功')
+            setModalOpen(false)
+          }
+        }
+      }}
+    >
+      <Space className="mt-6">
+        <div>标签组名称：</div>
+        <Select
+          style={{ width: 160 }}
+          placeholder="请选择标签组"
+          value={groupName}
+          onChange={setGroupName}
+          options={labelGroupList?.map((item) => ({
+            label: item.groupName,
+            value: item.groupName
+          }))}
+        />
+      </Space>
+    </Modal>
+  )
+}
+
 const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
   const { dataset, version } = useParams()
   const { datasetLabels, setDatasetLabels } = useLabelStore()
+  const [modalOpen, setModalOpen] = useState(false)
 
   const queryClient = useQueryClient()
   useQuery({
@@ -99,6 +165,20 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
       .current.setLabelByUuid(uuid, { name: item.name, color: item.color })
   }
 
+  const items: MenuProps['items'] = [
+    {
+      label: '导入标签组',
+      key: 'import',
+      icon: <PlusOutlined />
+    }
+  ]
+  const menuProps = {
+    items,
+    onClick: () => {
+      setModalOpen(true)
+    }
+  }
+
   return (
     <Card className="flex-1 ml-2">
       <div>
@@ -109,10 +189,13 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
             labelWidth="auto"
             title="添加标签"
             trigger={
-              <Button type="primary">
-                <PlusOutlined />
+              <Dropdown.Button
+                type="primary"
+                menu={menuProps}
+                className="absolute left-40 top-5"
+              >
                 添加标签
-              </Button>
+              </Dropdown.Button>
             }
             modalProps={{
               destroyOnClose: true
@@ -252,6 +335,12 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
           />
         ))}
       </div>
+      <AddGroupModal
+        modalOpen={modalOpen}
+        setModalOpen={setModalOpen}
+        datasetName={dataset!}
+        datasetVersion={version!}
+      />
     </Card>
   )
 }

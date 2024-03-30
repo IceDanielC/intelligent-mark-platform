@@ -34,3 +34,6 @@ export const updateUserLabel = (userLabel: UserLabel) =>
 
 export const deleteUserLabel = (userId: number) =>
   request.delete(`/userLabel/${userId}`)
+
+export const getListByUsername = (username: string) =>
+  request.get<any, ResData<UserLabel[]>>(`/userLabel/${username}/labelGroup`)

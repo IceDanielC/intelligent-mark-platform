@@ -2,7 +2,12 @@ import { Button, Popconfirm, Space, Spin, Tooltip, App } from 'antd'
 import LabeledImage, { type ImageLabelComponentType } from './LabeledImage'
 import { useEffect, useRef, useState } from 'react'
 import { type LabelInfo, detectImageUseOnlineModal } from '@/services/detection'
-import { EditOutlined, RobotOutlined } from '@ant-design/icons'
+import {
+  EditOutlined,
+  LeftOutlined,
+  RightOutlined,
+  RobotOutlined
+} from '@ant-design/icons'
 import { useQuery, useQueryClient } from 'react-query'
 import {
   annotatedImagesFromDataset,
@@ -67,7 +72,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
     setImageLoading(true)
 
     const handleKeyDown = (e: any) => {
-      if (e.key === 's') {
+      if (e.ctrlKey && e.key === 's') {
         handleSaveAnnotate(autosaveRef.current?.id as number)
       }
     }
@@ -101,6 +106,8 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
     setIsSaving(false)
     if (res.code === 200) {
       message.success('自动保存成功')
+      console.log(imageId, currentIndex, imageList.length, imageType)
+
       if (currentIndex !== imageList.length - 1) {
         if (imageType !== '3') setCurrentIndex(currentIndex + 1)
         setLabels([])
@@ -217,6 +224,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
             }
           }}
         >
+          <LeftOutlined />
           上一张图像
         </Button>
         <Button
@@ -229,10 +237,12 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
               message.warning('已经是最后一张了')
             }
           }}
+          className="pl-0"
         >
+          <RightOutlined />
           下一张图像
         </Button>
-        <Tooltip placement="top" title={'保存快捷键[S]'}>
+        <Tooltip placement="top" title={'保存快捷键[Ctrl+S]'}>
           <Button
             type="primary"
             onClick={() =>

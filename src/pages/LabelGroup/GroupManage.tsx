@@ -16,6 +16,7 @@ import {
 import { Button, Popconfirm, Tag, message } from 'antd'
 import { useQuery, useQueryClient } from 'react-query'
 import useSearchParams from '@/hooks/useSearchParams'
+import { useNavigate } from 'react-router-dom'
 
 const UpdateLabelModal: React.FC<{
   option: string
@@ -93,89 +94,14 @@ const UpdateLabelModal: React.FC<{
   )
 }
 
-const columns: ProColumns<UserLabel>[] = [
-  {
-    key: 'id',
-    title: 'ID',
-    dataIndex: 'id',
-    hideInSearch: true,
-    hideInTable: true
-  },
-  {
-    title: '标签组名称',
-    dataIndex: 'groupName',
-    fixed: 'left'
-  },
-  {
-    title: '用户id',
-    dataIndex: 'userId',
-    hideInSearch: true,
-    width: 100
-  },
-  {
-    title: '标签组描述',
-    dataIndex: 'description',
-    hideInSearch: true,
-    width: 300
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'createTime',
-    hideInSearch: true,
-    width: 150,
-    sorter: (a, b) => Date.parse(a.createTime) - Date.parse(b.createTime),
-    render(_dom, dataset) {
-      return (
-        <Tag icon={<ClockCircleOutlined />} color="processing">
-          {dataset.createTime}
-        </Tag>
-      )
-    }
-  },
-  {
-    key: 'actions',
-    title: '操作',
-    hideInSearch: true,
-    width: 240,
-    fixed: 'right',
-    render(_dom, userLabel) {
-      const queryClient = useQueryClient()
-
-      return (
-        <>
-          <Button type="link" size="small">
-            标签管理
-          </Button>
-          <UpdateLabelModal option="编辑" userLabel={userLabel} />
-
-          <Popconfirm
-            title="删除标签组"
-            description="你确定要删除该标签组吗？"
-            onConfirm={async () => {
-              await deleteUserLabel(userLabel.id)
-              queryClient.invalidateQueries(['/userLabel/list/page'])
-              message.success('删除成功')
-            }}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button type="link" size="small" danger>
-              删除
-            </Button>
-          </Popconfirm>
-        </>
-      )
-    }
-  }
-]
-
 const GroupManage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams<any>()
   const PAGE_SIZE = 5
   const queryClient = useQueryClient()
+  const nav = useNavigate()
 
   const {
-    data: datasetsPage,
+    data: groupPage,
     isFetching,
     isLoading,
     isPreviousData
@@ -195,6 +121,84 @@ const GroupManage: React.FC = () => {
     keepPreviousData: true
   })
 
+  const columns: ProColumns<UserLabel>[] = [
+    {
+      key: 'id',
+      title: 'ID',
+      dataIndex: 'id',
+      hideInSearch: true,
+      hideInTable: true
+    },
+    {
+      title: '标签组名称',
+      dataIndex: 'groupName',
+      fixed: 'left'
+    },
+    {
+      title: '用户id',
+      dataIndex: 'userId',
+      hideInSearch: true,
+      width: 100
+    },
+    {
+      title: '标签组描述',
+      dataIndex: 'description',
+      hideInSearch: true,
+      width: 300
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'createTime',
+      hideInSearch: true,
+      width: 150,
+      sorter: (a, b) => Date.parse(a.createTime) - Date.parse(b.createTime),
+      render(_dom, dataset) {
+        return (
+          <Tag icon={<ClockCircleOutlined />} color="processing">
+            {dataset.createTime}
+          </Tag>
+        )
+      }
+    },
+    {
+      key: 'actions',
+      title: '操作',
+      hideInSearch: true,
+      width: 240,
+      fixed: 'right',
+      render(_dom, userLabel) {
+        return (
+          <>
+            <Button
+              type="link"
+              size="small"
+              onClick={() => nav('/manage/label-group/list/' + userLabel.id)}
+            >
+              标签管理
+            </Button>
+            <UpdateLabelModal option="编辑" userLabel={userLabel} />
+
+            <Popconfirm
+              title="删除标签组"
+              description="你确定要删除该标签组吗？"
+              onConfirm={async () => {
+                await deleteUserLabel(userLabel.id)
+                queryClient.invalidateQueries(['/userLabel/list/page'])
+                message.success('删除成功')
+              }}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button type="link" size="small" danger>
+                删除
+              </Button>
+            </Popconfirm>
+          </>
+        )
+      }
+    }
+  ]
+
   return (
     <ProTable<UserLabel>
       columnsState={{
@@ -203,7 +207,7 @@ const GroupManage: React.FC = () => {
         }
       }}
       columns={columns}
-      dataSource={datasetsPage?.records ?? []}
+      dataSource={groupPage?.records ?? []}
       loading={isLoading || (isFetching && isPreviousData)}
       onReset={() => setSearchParams({})}
       onSubmit={(params) =>
@@ -224,7 +228,7 @@ const GroupManage: React.FC = () => {
       search={{ labelWidth: 'auto' }}
       pagination={{
         current: parseInt(searchParams?.current ?? 1),
-        total: datasetsPage?.total,
+        total: groupPage?.total,
         pageSize: PAGE_SIZE,
         showQuickJumper: true,
         showSizeChanger: false,

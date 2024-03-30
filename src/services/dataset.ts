@@ -60,3 +60,14 @@ export const createDatasetVersion = (
     `/dataset/newVersion?extends=${isExtends}&historyVersion=${historyVersion}`,
     dataset
   )
+
+// 合并标签组
+export const mergeLabelGroup = (
+  username: string,
+  datasetName: string,
+  datasetVersion: string,
+  groupName: string
+) =>
+  request.get(
+    `/labelGroup/merge/datasetLabel?username=${username}&datasetName=${datasetName}&datasetVersion=${datasetVersion}&groupName=${groupName}`
+  )
