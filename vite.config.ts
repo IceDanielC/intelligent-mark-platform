@@ -1,10 +1,21 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
+import { Plugin as importToCDN, autoComplete } from 'vite-plugin-cdn-import'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+  plugins: [
+    react(),
+    importToCDN({
+      modules: [
+        autoComplete('react'),
+        autoComplete('react-dom'),
+        autoComplete('antd'),
+        autoComplete('react-router-dom')
+      ]
+    })
+  ],
   resolve: {
     alias: {
       '@': path.resolve('./src')

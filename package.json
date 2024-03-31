@@ -24,6 +24,7 @@
     "react-query": "^3.39.3",
     "react-router-dom": "^6.17.0",
     "simple-image-label": "^0.0.7",
+    "vite-plugin-cdn-import": "^0.3.5",
     "zustand": "^4.4.7"
   },
   "devDependencies": {
