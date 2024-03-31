@@ -35,27 +35,33 @@ export const isValidated = (
   )
 
 //通过数据集获取images
-export const imagesFromDataset = (datasetName: string, version: string) =>
+export const imagesFromDataset = (
+  username: string,
+  datasetName: string,
+  version: string
+) =>
   request.get<any, ResData<DatasetImage[]>>(
-    `/dataset/images/${datasetName}/${version}`
+    `/dataset/images/${username}/${datasetName}/${version}`
   )
 
 // 获取已标记images
 export const annotatedImagesFromDataset = (
+  username: string,
   datasetName: string,
   version: string
 ) =>
   request.get<any, ResData<DatasetImage[]>>(
-    `/dataset/images/annotated/${datasetName}/${version}`
+    `/dataset/images/annotated/${username}/${datasetName}/${version}`
   )
 
 // 获取未标记images
 export const unAnnotatedImagesFromDataset = (
+  username: string,
   datasetName: string,
   version: string
 ) =>
   request.get<any, ResData<DatasetImage[]>>(
-    `/dataset/images/unAnnotated/${datasetName}/${version}`
+    `/dataset/images/unAnnotated/${username}/${datasetName}/${version}`
   )
 
 // 上传图片

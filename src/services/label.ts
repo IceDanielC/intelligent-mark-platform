@@ -42,9 +42,13 @@ export const saveLabelByImage = (imageId: number, labels: LabelInfoSelf[]) =>
   request.post<any, ResData<any>>('/labelInfo/save?imageId=' + imageId, labels)
 
 // 获取对于数据集的保存的所有labels
-export const getDatasetLabels = (datasetName: string, version: string) =>
+export const getDatasetLabels = (
+  username: string,
+  datasetName: string,
+  version: string
+) =>
   request.get<any, ResData<DatasetLabel[]>>(
-    `/labelGroup/dataset/${datasetName}/${version}`
+    `/labelGroup/dataset/${username}/${datasetName}/${version}`
   )
 
 // 导出图片中的所有标签（YOLO格式）
@@ -53,12 +57,13 @@ export const downloadLabelYOLO = (labels: YOLOLabel[]) =>
 
 // 新增标签
 export const addLabelGroup = (
+  username: string,
   datasetName: string,
   version: string,
   labelFormData: DatasetLabel
 ) =>
   request.post<any, ResData<string | null>>(
-    `/labelGroup/add/${datasetName}/${version}`,
+    `/labelGroup/add/${username}/${datasetName}/${version}`,
     labelFormData
   )
 

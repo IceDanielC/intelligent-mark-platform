@@ -22,9 +22,11 @@ const useImageQuery = () => {
   useQuery({
     queryKey: ['/dataset/images', dataset, version, '1'],
     queryFn: () =>
-      imagesFromDataset(dataset as string, version as string).then(
-        (res) => res.data
-      ),
+      imagesFromDataset(
+        localStorage.getItem('user/info') as string,
+        dataset as string,
+        version as string
+      ).then((res) => res.data),
     onSuccess(data) {
       setAllImages(data)
     }
@@ -33,9 +35,11 @@ const useImageQuery = () => {
   useQuery({
     queryKey: ['/dataset/images', dataset, version, '2'],
     queryFn: () =>
-      annotatedImagesFromDataset(dataset as string, version as string).then(
-        (res) => res.data
-      ),
+      annotatedImagesFromDataset(
+        localStorage.getItem('user/info') as string,
+        dataset as string,
+        version as string
+      ).then((res) => res.data),
     onSuccess(data) {
       setAnnotatedImages(data)
     }
@@ -44,9 +48,11 @@ const useImageQuery = () => {
   useQuery({
     queryKey: ['/dataset/images', dataset, version, '3'],
     queryFn: () =>
-      unAnnotatedImagesFromDataset(dataset as string, version as string).then(
-        (res) => res.data
-      ),
+      unAnnotatedImagesFromDataset(
+        localStorage.getItem('user/info') as string,
+        dataset as string,
+        version as string
+      ).then((res) => res.data),
     onSuccess(data) {
       setunAnnoImages(data)
     }

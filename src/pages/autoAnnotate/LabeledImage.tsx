@@ -46,9 +46,11 @@ const ImageLabelComponent: React.FC<{
     const { data: savedLabels } = useQuery({
       queryKey: ['/labelGroup/dataset', dataset, version],
       queryFn: () =>
-        getDatasetLabels(dataset as string, version as string).then(
-          (res) => res.data
-        ),
+        getDatasetLabels(
+          localStorage.getItem('user/info') as string,
+          dataset as string,
+          version as string
+        ).then((res) => res.data),
       staleTime: Infinity
     })
 

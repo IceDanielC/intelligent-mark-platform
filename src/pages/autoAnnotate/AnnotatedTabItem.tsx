@@ -37,9 +37,11 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
   const { data: images, isLoading } = useQuery({
     queryKey: ['/dataset/images', dataset, version, imageType],
     queryFn: () =>
-      imageTypeMap[imageType](dataset as string, version as string).then(
-        (res) => res.data
-      )
+      imageTypeMap[imageType](
+        localStorage.getItem('user/info') as string,
+        dataset as string,
+        version as string
+      ).then((res) => res.data)
   })
 
   const imageList = images?.map((image) => image.url) ?? []

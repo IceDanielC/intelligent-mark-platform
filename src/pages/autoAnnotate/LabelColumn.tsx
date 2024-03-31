@@ -147,9 +147,11 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
   useQuery({
     queryKey: ['/labelGroup/dataset', dataset, version],
     queryFn: () =>
-      getDatasetLabels(dataset as string, version as string).then(
-        (res) => res.data
-      ),
+      getDatasetLabels(
+        localStorage.getItem('user/info') as string,
+        dataset as string,
+        version as string
+      ).then((res) => res.data),
     onSuccess(labels) {
       setDatasetLabels(labels)
     }
@@ -210,6 +212,7 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
                 color: values.color.toHexString()
               }
               const res = await addLabelGroup(
+                localStorage.getItem('user/info') as string,
                 dataset as string,
                 version as string,
                 labelData

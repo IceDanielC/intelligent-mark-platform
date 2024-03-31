@@ -20,9 +20,11 @@ export default () => {
   const { data: images, isLoading } = useQuery({
     queryKey: ['/dataset/images', dataset, version],
     queryFn: () =>
-      imagesFromDataset(dataset as string, version as string).then(
-        (res) => res.data
-      )
+      imagesFromDataset(
+        localStorage.getItem('user/info') as string,
+        dataset as string,
+        version as string
+      ).then((res) => res.data)
   })
 
   const imageList = images?.map((image) => image.url) ?? []
