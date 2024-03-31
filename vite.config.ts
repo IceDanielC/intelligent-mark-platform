@@ -8,12 +8,7 @@ export default defineConfig({
   plugins: [
     react(),
     importToCDN({
-      modules: [
-        autoComplete('react'),
-        autoComplete('react-dom'),
-        autoComplete('antd'),
-        autoComplete('react-router-dom')
-      ]
+      modules: [autoComplete('react'), autoComplete('react-dom')]
     })
   ],
   resolve: {

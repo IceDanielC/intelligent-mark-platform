@@ -12,6 +12,8 @@ export type User = {
   username: string
   password: string
   role: string
+  isAdmin?: boolean
+  checkNumber?: string
 }
 
 export const loginService = (username: string, password: string) =>
@@ -46,3 +48,7 @@ export const getMinioServerToken = () =>
       localStorage.setItem('minio/token', headers['authorization'])
       return response
     })
+
+// 注册新用户
+export const registerUser = (user: User) =>
+  request.post<any, ResData<string>>('/admin/createUser', user)

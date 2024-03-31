@@ -262,7 +262,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
             onConfirm={handleAutoAnnotate}
           >
             <Button
-              className="bg-[#00b359]"
+              className="bg-[#00b359] btn-auto-annotate"
               type="primary"
               icon={<RobotOutlined />}
             >
@@ -274,7 +274,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
             type="primary"
             icon={<RobotOutlined />}
             onClick={handleAutoAnnotate}
-            className="bg-[#00b359]"
+            className="bg-[#00b359] btn-auto-annotate"
           >
             云智能标注
           </Button>

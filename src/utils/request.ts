@@ -11,6 +11,8 @@ export type ResData<T> = {
   msg: string
 }
 
+console.log(import.meta.env)
+
 //创建axios实例
 const request = axios.create({
   // 设置baseURL

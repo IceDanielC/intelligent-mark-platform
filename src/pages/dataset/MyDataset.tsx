@@ -68,7 +68,8 @@ const MyDataset: React.FC = () => {
       title: '数据集版本',
       dataIndex: 'version',
       width: 50,
-      hideInSearch: true
+      hideInSearch: true,
+      align: 'center'
     },
     {
       title: '标注类型',
