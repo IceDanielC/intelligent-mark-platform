@@ -7,7 +7,11 @@ import {
 } from '@/services/label'
 import { getListByUsername } from '@/services/userLabel'
 import { useLabelStore } from '@/store/useLabelStore'
-import { EllipsisOutlined, PlusOutlined } from '@ant-design/icons'
+import {
+  DownloadOutlined,
+  EllipsisOutlined,
+  PlusOutlined
+} from '@ant-design/icons'
 import { ModalForm, ProForm, ProFormText } from '@ant-design/pro-components'
 import {
   Button,
@@ -167,18 +171,47 @@ const LabelColumn: React.FC<{ labelImageRef: any }> = ({ labelImageRef }) => {
       .current.setLabelByUuid(uuid, { name: item.name, color: item.color })
   }
 
-  const items: MenuProps['items'] = [
-    {
-      label: '导入标签组',
-      key: 'import',
-      icon: <PlusOutlined />
+  const downloadLabelFile = () => {
+    if (datasetLabels.length === 0) {
+      message.warning('暂无标签')
+      return
     }
-  ]
+    const downloadLabels = datasetLabels
+      .map((label, index) =>
+        JSON.stringify({
+          index,
+          name: label.name,
+          color: label.color
+        })
+      )
+      .join('\n')
+    const blob = new Blob([downloadLabels], {
+      type: 'text/plain'
+    })
+    const href = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = href
+    link.download = `${dataset}-${version}标签.txt`
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   const menuProps = {
-    items,
-    onClick: () => {
-      setModalOpen(true)
-    }
+    items: [
+      {
+        label: '导入标签组',
+        key: 'import',
+        icon: <PlusOutlined />,
+        onClick: () => setModalOpen(true)
+      },
+      {
+        label: '下载标签文件',
+        key: 'download',
+        icon: <DownloadOutlined />,
+        onClick: downloadLabelFile
+      }
+    ]
   }
 
   return (

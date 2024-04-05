@@ -4,7 +4,6 @@ import {
   ExpandOutlined,
   OneToOneOutlined,
   TagsOutlined,
-  UploadOutlined,
   UserOutlined
 } from '@ant-design/icons'
 import { NavLink } from 'react-router-dom'
@@ -73,10 +72,5 @@ export const menuItems = [
         病虫害高精度检测
       </NavLink>
     )
-  },
-  {
-    key: '3',
-    icon: <UploadOutlined />,
-    label: 'nav 3'
   }
 ]
