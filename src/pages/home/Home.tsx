@@ -19,9 +19,7 @@ const Home: React.FC = () => {
             shape="round"
             onClick={() =>
               navigator(
-                localStorage.getItem('user/info')
-                  ? '/manage/dashboard'
-                  : LOGIN_PATHNAME
+                localStorage.getItem('user/info') ? '/manage' : LOGIN_PATHNAME
               )
             }
             style={{ padding: '0 2rem' }}

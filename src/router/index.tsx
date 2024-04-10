@@ -11,6 +11,7 @@ import ManageLayout from '@/layouts/ManageLayout'
 import Home from '@/pages/home/Home'
 import Login from '@/pages/login/Login'
 import NotFound from '../pages/NotFound'
+import UnAuthorize from '../pages/UnAuthorize'
 
 const UserManagement = lazy(() => import('@/pages/authority/UserManagement'))
 const RoleManagement = lazy(() => import('@/pages/authority/RoleManagement'))
@@ -71,7 +72,7 @@ const routes = [
     children: [
       {
         index: true,
-        loader: () => redirect('/manage/dashboard')
+        loader: () => redirect('/manage/dataset/my-dataset')
       },
       {
         path: 'auth-management/user',
@@ -126,6 +127,10 @@ const routes = [
         element: <HighProcisionDetect />
       }
     ]
+  },
+  {
+    path: '/403',
+    element: <UnAuthorize />
   },
   {
     path: '*', // 404 路由配置

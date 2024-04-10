@@ -18,7 +18,7 @@ import { useMenuStore } from '@/store/useMenuStore'
 
 const { Sider, Content, Footer } = Layout
 
-const Header = () => {
+const Header: React.FC = () => {
   const {
     token: { colorBgContainer }
   } = theme.useToken()
@@ -76,10 +76,22 @@ const ManageLayout: React.FC = () => {
   } = theme.useToken()
   const location = useLocation()
   const { menus, fetchMenus } = useMenuStore()
+  const navigate = useNavigate()
 
+  // 路由鉴权
   useEffect(() => {
     fetchMenus()
-  }, [])
+
+    if (menus.length > 0) {
+      if (
+        !menus.includes(
+          location.pathname.match(/(?<=(manage\/))[^/]+/)?.[0] ?? ''
+        )
+      ) {
+        navigate('/403')
+      }
+    }
+  }, [location.pathname, menus])
 
   function getSeletedKeys() {
     return location.pathname.slice(8).split('/')
