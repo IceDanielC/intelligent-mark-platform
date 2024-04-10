@@ -182,6 +182,17 @@ const MyDataset: React.FC = () => {
             >
               标注
             </Button>
+            <Button
+              type="link"
+              size="small"
+              onClick={() => {
+                nav(
+                  `/manage/high-precision-detection/detail/${dataset.name}/${dataset.version}`
+                )
+              }}
+            >
+              检测
+            </Button>
             {dataset.version === 'V1' ? (
               <NewVersionModal dataset={dataset} />
             ) : null}

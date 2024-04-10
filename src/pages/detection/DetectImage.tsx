@@ -14,7 +14,7 @@ export const detectByModel = (mask: number[][]) => {
     ctx.fillRect(10, 150 - 20, 150, 20) // 后端传+计算
     ctx.strokeStyle = 'white'
     ctx.font = '100 14px sans-serif'
-    ctx.strokeText('XXXX XXXXX 0.99', 10, 130 + 15) // 后端传+计算
+    ctx.strokeText('Fusarium A-LEVEL 0.89', 10, 130 + 15) // 后端传+计算
     ctx.beginPath()
     // mask掩膜数据来自后端
     mask.forEach((point, index) => {

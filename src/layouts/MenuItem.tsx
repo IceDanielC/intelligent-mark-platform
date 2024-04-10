@@ -69,7 +69,7 @@ export const menuItems = [
     icon: <OneToOneOutlined />,
     label: (
       <NavLink to="/manage/high-precision-detection/index">
-        病虫害高精度检测
+        小麦病害高精度检测
       </NavLink>
     )
   }
