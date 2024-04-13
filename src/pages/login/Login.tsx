@@ -8,6 +8,7 @@ import { getMinioServerToken, loginService } from '@/services/user'
 import styles from './Login.module.scss'
 import { useNavigate } from 'react-router-dom'
 import { CreateUserModal } from './CreateUserModal'
+import { useMenuStore } from '@/store/useMenuStore'
 
 const { Title } = Typography
 
@@ -35,7 +36,8 @@ function getUserInfoFromStorage() {
 
 const Login: React.FC = () => {
   const navigator = useNavigate()
-  const [form] = Form.useForm() // 第三方 hook
+  const [form] = Form.useForm()
+  const { fetchMenus } = useMenuStore()
 
   useEffect(() => {
     const { username, password } = getUserInfoFromStorage()
@@ -56,6 +58,7 @@ const Login: React.FC = () => {
           localStorage.setItem(ACCESS_TOKEN, accessToken)
           localStorage.setItem(FRESH_TOKEN, freshToken)
           localStorage.setItem('user/info', username as string)
+          fetchMenus(username!)
           navigator('/manage')
           message.success('登录成功')
         }

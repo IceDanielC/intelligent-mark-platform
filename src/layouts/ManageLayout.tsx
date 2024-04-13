@@ -28,6 +28,7 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
     localStorage.removeItem('user/info')
+    localStorage.removeItem('menu-store')
     message.info('User logged out!')
     navigate('/home')
   }
@@ -75,13 +76,11 @@ const ManageLayout: React.FC = () => {
     token: { colorBgContainer }
   } = theme.useToken()
   const location = useLocation()
-  const { menus, fetchMenus } = useMenuStore()
+  const { menus } = useMenuStore()
   const navigate = useNavigate()
 
   // 路由鉴权
   useEffect(() => {
-    fetchMenus()
-
     if (menus.length > 0) {
       if (
         !menus.includes(
@@ -91,7 +90,7 @@ const ManageLayout: React.FC = () => {
         navigate('/403')
       }
     }
-  }, [location.pathname, menus])
+  }, [location.pathname])
 
   function getSeletedKeys() {
     return location.pathname.slice(8).split('/')

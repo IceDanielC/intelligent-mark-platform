@@ -12,17 +12,7 @@ export default defineConfig({
         autoComplete('react'),
         autoComplete('react-dom'),
         autoComplete('ahooks'),
-        autoComplete('axios'),
-        {
-          name: 'dayjs',
-          var: 'dayjs',
-          path: 'https://cdn.bootcdn.net/ajax/libs/dayjs/1.11.9/dayjs.min.js'
-        },
-        {
-          name: 'antd',
-          var: 'antd',
-          path: 'https://cdnjs.cloudflare.com/ajax/libs/antd/5.10.1/antd.min.js'
-        }
+        autoComplete('axios')
       ]
     })
   ],

@@ -1,16 +1,23 @@
 import { getRoleMenus } from '@/services/role'
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
 export const useMenuStore = create<{
   menus: string[]
-  fetchMenus: () => void
-}>((set) => ({
-  menus: [],
+  fetchMenus: (username: string) => void
+}>(
+  // @ts-ignore
+  persist(
+    (set) => ({
+      menus: [],
 
-  fetchMenus: async () => {
-    const { data: menuStr } = await getRoleMenus(
-      localStorage.getItem('user/info') ?? ''
-    )
-    set({ menus: menuStr.split(',') })
-  }
-}))
+      fetchMenus: async (username: string) => {
+        const { data: menuStr } = await getRoleMenus(username)
+        set({ menus: menuStr.split(',') })
+      }
+    }),
+    {
+      name: 'menu-store' // 唯一名称
+    }
+  )
+)
