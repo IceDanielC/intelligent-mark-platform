@@ -62,32 +62,32 @@ const MyDataset: React.FC = () => {
       title: '数据集名称',
       dataIndex: 'name',
       fixed: 'left',
-      width: 250
+      width: 200
     },
     {
       title: '数据集版本',
       dataIndex: 'version',
-      width: 50,
-      hideInSearch: true,
-      align: 'center'
+      width: 100,
+      hideInSearch: true
+      // align: 'center'
     },
     {
       title: '标注类型',
       dataIndex: 'annotateType',
       hideInSearch: true,
-      width: 200
+      width: 150
     },
     {
       title: '数据量',
       dataIndex: 'imgNumber',
       hideInSearch: true,
-      width: 70
+      width: 80
     },
     {
       title: '数据集大小',
       dataIndex: 'size',
       hideInSearch: true,
-      width: 170,
+      width: 120,
       render(_dom, dataset) {
         return <span>{convertBytesToSize(dataset.size)}</span>
       }
@@ -112,7 +112,7 @@ const MyDataset: React.FC = () => {
           ></Badge>
         )
       },
-      width: 150
+      width: 130
     },
     {
       title: '标注模版',
@@ -124,7 +124,7 @@ const MyDataset: React.FC = () => {
       title: '存储平台',
       hideInSearch: true,
       dataIndex: 'savePlace',
-      width: 150
+      width: 120
     },
     {
       title: '创建时间',
@@ -144,7 +144,7 @@ const MyDataset: React.FC = () => {
       key: 'actions',
       title: '操作',
       hideInSearch: true,
-      width: 240,
+      width: 380,
       fixed: 'right',
       render(_dom, dataset) {
         return (
@@ -224,11 +224,11 @@ const MyDataset: React.FC = () => {
   const { resizableColumns, components, tableWidth } = useAntdResizableHeader({
     /** @ts-ignore */
     columns: useMemo(() => columns, []), // 如果columns定义在组件内，必须使用useMemo
-    minConstraints: 50,
-    columnsState: {
-      persistenceKey: 'table/widths/dataset',
-      persistenceType: 'localStorage'
-    }
+    minConstraints: 50
+    // columnsState: {
+    //   persistenceKey: 'table/widths/dataset',
+    //   persistenceType: 'localStorage'
+    // }
   })
 
   return (
