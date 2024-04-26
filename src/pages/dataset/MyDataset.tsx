@@ -222,7 +222,6 @@ const MyDataset: React.FC = () => {
   ]
 
   const { resizableColumns, components, tableWidth } = useAntdResizableHeader({
-    /** @ts-ignore */
     columns: useMemo(() => columns, []), // 如果columns定义在组件内，必须使用useMemo
     minConstraints: 50
     // columnsState: {

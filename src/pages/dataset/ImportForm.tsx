@@ -91,7 +91,7 @@ const ImportForm: React.FC = () => {
           <ProForm
             // @ts-ignore
             labelWidth="auto"
-            onFinish={async (_values: any) => {
+            onFinish={async () => {
               const images = imageList.map((image) => ({
                 url: image.response.msg.replace('localhost', '47.104.78.142'),
                 datasetId: Number.parseInt(datasetId as string),
@@ -137,7 +137,7 @@ const ImportForm: React.FC = () => {
                   {
                     required: true,
                     message: '请至少上传一张图片',
-                    validator: (_, _value) =>
+                    validator: () =>
                       imageList.length > 0
                         ? Promise.resolve()
                         : Promise.reject(new Error('请至少上传一张图片'))

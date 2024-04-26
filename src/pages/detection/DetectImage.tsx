@@ -22,7 +22,7 @@ export const detectByModel = (mask: number[][]) => {
       ctx.lineTo(point[0], point[1])
     })
     ctx.closePath()
-    ctx.fillStyle = 'rgb(255 78 22 / 50%)' // 后端传，默认50%透明度
+    ctx.fillStyle = 'rgb(255 78 22 / 50%)' // 默认50%透明度
     ctx.fill()
   }
 }

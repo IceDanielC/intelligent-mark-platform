@@ -20,7 +20,7 @@ type OpenAPIRes = {
 }
 
 const ACCESS_TOKEN =
-  '24.d2e883026c7722a2688f45d213514adb.2592000.1713525772.282335-44973375'
+  '24.29ffab8aea07709a897470ee6e8d66fb.2592000.1716730096.282335-44973375'
 
 // 重新获取云检测API等access_token避免过期
 export const getAccessToken = () =>
