@@ -47,7 +47,6 @@ const Login: React.FC = () => {
   const { run: userLogin, loading } = useRequest(
     async (username: string, password: string) => {
       const data = await loginService(username, password)
-      // await getMinioServerToken()
       return data
     },
     {

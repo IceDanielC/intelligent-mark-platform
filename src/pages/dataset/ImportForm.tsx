@@ -93,7 +93,7 @@ const ImportForm: React.FC = () => {
             labelWidth="auto"
             onFinish={async () => {
               const images = imageList.map((image) => ({
-                url: image.response.msg.replace('localhost', '47.104.78.142'),
+                url: image.response.data,
                 datasetId: Number.parseInt(datasetId as string),
                 isAnnotate: 'false',
                 name: image.name,
@@ -145,10 +145,7 @@ const ImportForm: React.FC = () => {
                 ]}
               >
                 <Upload
-                  action="http://47.104.78.142:8085/minio/upload"
-                  headers={{
-                    Authorization: localStorage.getItem('minio/token') ?? ''
-                  }}
+                  action="http://118.178.238.73:8081/upload/image"
                   listType="picture-card"
                   fileList={imageList}
                   onPreview={handlePreview}

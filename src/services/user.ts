@@ -1,5 +1,4 @@
 import request, { type ResData } from '@/utils/request'
-import axios from 'axios'
 
 export type DoubleToken = {
   accessToken: string
@@ -36,18 +35,18 @@ export const deleteUser = (id: number) =>
   request.delete<any, ResData<string | null>>('/admin/user/' + id)
 
 // 获取MinIO服务器的上传图片的token
-export const getMinioServerToken = () =>
-  axios
-    .post('http://47.104.78.142:8085/admin/login', {
-      username: 'admin',
-      password: '123456'
-    })
-    .then((response) => {
-      // 获取所有响应头
-      const headers = response.headers
-      localStorage.setItem('minio/token', headers['authorization'])
-      return response
-    })
+// export const getMinioServerToken = () =>
+//   axios
+//     .post('http://47.104.78.142:8085/admin/login', {
+//       username: 'admin',
+//       password: '123456'
+//     })
+//     .then((response) => {
+//       // 获取所有响应头
+//       const headers = response.headers
+//       localStorage.setItem('minio/token', headers['authorization'])
+//       return response
+//     })
 
 // 注册新用户
 export const registerUser = (user: User) =>
