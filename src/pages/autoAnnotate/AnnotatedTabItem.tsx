@@ -182,11 +182,11 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
       // 获取 blob 对象
       .then((res) => res.blob())
       .then((blob) => {
-        var link = document.createElement('a')
+        const link = document.createElement('a')
         link.style.display = 'none'
         document.body.appendChild(link)
         // 生成Blob URL并设置给a标签的href属性
-        var url = window.URL.createObjectURL(blob)
+        const url = window.URL.createObjectURL(blob)
         link.href = url
         link.download = images?.[currentIndex].name ?? ''
         link.click()
