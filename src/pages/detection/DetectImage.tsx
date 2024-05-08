@@ -9,12 +9,12 @@ export const detectByModel = (mask: number[][]) => {
     // 使用 API 达到预期效果
     ctx.lineWidth = 2
     ctx.strokeStyle = 'rgb(255 78 22)' // 后端传
-    ctx.strokeRect(10, 150, 610, 100) // 后端传
+    ctx.strokeRect(5, 160, 612, 90) // 后端传
     ctx.fillStyle = 'rgb(255 78 22)'
-    ctx.fillRect(10, 150 - 20, 150, 20) // 后端传+计算
+    ctx.fillRect(5, 150 - 10, 160, 20) // 后端传+计算
     ctx.strokeStyle = 'white'
     ctx.font = '100 14px sans-serif'
-    ctx.strokeText('Fusarium A-LEVEL 0.89', 10, 130 + 15) // 后端传+计算
+    ctx.strokeText('Fusarium A-LEVEL 0.89', 10, 130 + 25) // 后端传+计算
     ctx.beginPath()
     // mask掩膜数据来自后端
     mask.forEach((point, index) => {

@@ -131,7 +131,7 @@ export default () => {
           size="small"
           type="primary"
           icon={<DownloadOutlined />}
-          onClick={() => downloadImage(images?.[currentIndex].name!)}
+          onClick={() => downloadImage(images?.[currentIndex].name)}
           disabled={imageLoading}
         >
           导出标注图片

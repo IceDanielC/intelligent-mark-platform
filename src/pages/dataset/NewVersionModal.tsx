@@ -23,7 +23,10 @@ const NewVersionModal: React.FC<{ dataset: Dataset }> = ({ dataset }) => {
       title="新增数据集版本"
       layout="horizontal"
       request={async () => {
-        const { data: latestVersion } = await getDatasetNewVersion(dataset.name)
+        const { data: latestVersion } = await getDatasetNewVersion(
+          localStorage.getItem('user/info') as string,
+          dataset.name
+        )
         return { version: 'V' + (parseInt(latestVersion.slice(1)) + 1) }
       }}
       trigger={
@@ -117,6 +120,7 @@ const NewVersionModal: React.FC<{ dataset: Dataset }> = ({ dataset }) => {
           initialValue={'V1'}
           request={async () => {
             const { data: latestVersion } = await getDatasetNewVersion(
+              localStorage.getItem('user/info') as string,
               dataset.name
             )
             let versionNumber = parseInt(latestVersion.slice(1))
