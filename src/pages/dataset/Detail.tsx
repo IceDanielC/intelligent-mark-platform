@@ -103,7 +103,7 @@ const DisplayImage: React.FC<{
 
 const Detail: React.FC<{ images: DatasetImage[] }> = ({ images }) => {
   return (
-    <div className="flex" style={{overflowX: 'hidden'}}>
+    <div className="flex">
       <div
         className="flex flex-wrap w-[58vw] h-[70vh] border border-solid border-slate-300"
       >
