@@ -103,10 +103,9 @@ const DisplayImage: React.FC<{
 
 const Detail: React.FC<{ images: DatasetImage[] }> = ({ images }) => {
   return (
-    <div className="flex">
+    <div className="flex" style={{overflowX: 'hidden'}}>
       <div
-        className="flex flex-wrap w-[58vw] h-[70vh] 
-      overflow-auto border border-solid border-slate-300"
+        className="flex flex-wrap w-[58vw] h-[70vh] border border-solid border-slate-300"
       >
         {images.map((image, index) => (
           <DisplayImage

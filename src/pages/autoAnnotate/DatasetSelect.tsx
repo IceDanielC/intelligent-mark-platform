@@ -4,7 +4,7 @@ import { useQuery } from 'react-query'
 import { useNavigate } from 'react-router-dom'
 
 const prehandleDataset = (originDataset: Dataset[] | undefined) => {
-  const seen: { [index in string]: any } = {}
+  const seen: { [key: string]: any } = {}
   return originDataset
     ?.map((dataset) => {
       const datasetName = dataset.name
@@ -20,7 +20,7 @@ const prehandleDataset = (originDataset: Dataset[] | undefined) => {
       }
     })
     .filter((option) => {
-      if (seen.hasOwnProperty(option.label)) return false
+      if (Object.prototype.hasOwnProperty.call(seen, option.label)) return false
       else {
         seen[option.label] = 1
         return true
