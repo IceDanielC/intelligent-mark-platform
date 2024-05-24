@@ -230,6 +230,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
           modelStore.models.find((model) => model.modelName === modelName)
             ?.modelApi ?? ''
         }
+        modelName={modelName ?? ''}
       />
       <div className="flex">
         <Spin spinning={isSaving} tip="标注保存中...">

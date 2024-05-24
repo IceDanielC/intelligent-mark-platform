@@ -6,7 +6,15 @@ import {
   saveLabelByImage
 } from '@/services/label'
 import { RobotOutlined } from '@ant-design/icons'
-import { Button, Modal, Popconfirm, Progress, ProgressProps, message } from 'antd'
+import {
+  Button,
+  Modal,
+  Popconfirm,
+  Progress,
+  ProgressProps,
+  Typography,
+  message
+} from 'antd'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
@@ -18,8 +26,9 @@ export type Process = {
 }
 
 const BatchDetectButton: React.FC<{
-  apiPath: string
-}> = ({ apiPath }) => {
+  apiPath: string,
+  modelName: string
+}> = ({ apiPath, modelName }) => {
   const { dataset, version } = useParams()
   const [isModalOpen, setIsModalopen] = useState(false)
   const [process, setProcess] = useState<Process>({ complete: 0, total: 1 })
@@ -44,10 +53,10 @@ const BatchDetectButton: React.FC<{
       dataset as string,
       version as string
     )
-    if(unAnnoImages.length === 0) {
-        message.warning('当前数据集已标注完成')
-        setIsModalopen(false)
-        return;
+    if (unAnnoImages.length === 0) {
+      message.warning('当前数据集已标注完成')
+      setIsModalopen(false)
+      return
     }
     // 对unAnnoImages进行分组，每组最多两个（API限制）
     const unAnnoImagesChunks: DatasetImage[][] = []
@@ -101,14 +110,20 @@ const BatchDetectButton: React.FC<{
 
   const twoColors: ProgressProps['strokeColor'] = {
     '0%': '#108ee9',
-    '100%': '#87d068',
-  };
+    '100%': '#87d068'
+  }
 
   return (
     <>
       <Popconfirm
         title="一键标注"
-        description="您确定要使用当前模型对未检测图片进行标注吗？"
+        description={
+          <div>
+            您确定要使用当前模型
+            <Typography.Text keyboard>{modelName}</Typography.Text>
+            对未检测图片进行标注吗？
+          </div>
+        }
         okText="继续"
         cancelText="取消"
         onConfirm={handleBatchAnnotate}
@@ -130,9 +145,9 @@ const BatchDetectButton: React.FC<{
         <div>
           <div>标注过程中请勿刷新页面</div>
           <Progress
-            percent={(process.complete / process.total) * 100}
+            percent={+((process.complete / process.total) * 100).toFixed(1)}
             status="active"
-            strokeColor={twoColors} 
+            strokeColor={twoColors}
           />
         </div>
       </Modal>
