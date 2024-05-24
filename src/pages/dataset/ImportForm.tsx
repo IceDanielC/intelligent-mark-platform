@@ -64,12 +64,6 @@ const ImportForm: React.FC = () => {
           canvas.height = img.naturalHeight
           const ctx = canvas.getContext('2d')!
           ctx.drawImage(img, 0, 0)
-          // 添加水印
-          // ctx.fillStyle = 'red'
-          // ctx.textBaseline = 'middle'
-          // ctx.font = '33px Arial'
-          // ctx.fillText('Ant Design', 20, 20)
-
           // 图片压缩：toBlob的第三个参数
           canvas.toBlob((result) => resolve(result as Blob), 'image/jpeg', 0.2)
         }

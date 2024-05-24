@@ -105,7 +105,7 @@ const Detail: React.FC<{ images: DatasetImage[] }> = ({ images }) => {
   return (
     <div className="flex">
       <div
-        className="flex flex-wrap w-[58vw] h-[70vh] border border-solid border-slate-300"
+        className="flex flex-wrap w-[58vw] h-[70vh] border border-solid border-slate-300 overflow-y-scroll"
       >
         {images.map((image, index) => (
           <DisplayImage
