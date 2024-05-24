@@ -29,8 +29,8 @@ export const getAccessToken = () =>
   )
 
 // 百度云API
-export const detectImageUseOnlineModal = (url: string) =>
+export const detectImageUseOnlineModal = (url: string, apiPath: string) =>
   request.post<any, OpenAPIRes>(
-    `/zw_disease?input_type=url&access_token=${ACCESS_TOKEN}`,
+    `${apiPath}?input_type=url&access_token=${ACCESS_TOKEN}`,
     { url, threshold: 0.7 }
   )

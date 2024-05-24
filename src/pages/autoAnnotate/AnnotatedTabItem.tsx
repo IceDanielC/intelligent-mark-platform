@@ -1,4 +1,4 @@
-import { Button, Popconfirm, Space, Spin, Tooltip, App } from 'antd'
+import { Button, Popconfirm, Space, Spin, Tooltip, App, Select } from 'antd'
 import LabeledImage, { type ImageLabelComponentType } from './LabeledImage'
 import { useEffect, useRef, useState } from 'react'
 import { type LabelInfo, detectImageUseOnlineModal } from '@/services/detection'
@@ -19,6 +19,8 @@ import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { LabelInfoSelf, YOLOLabel, saveLabelByImage } from '@/services/label'
 import LabelColumn from './LabelColumn'
 import { useLabelStore } from '@/store/useLabelStore'
+import { getModels } from '@/services/model'
+import { useModelStore } from '@/store/useModelStore'
 
 const imageTypeMap = {
   '1': imagesFromDataset,
@@ -55,9 +57,27 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
 
   const autosaveRef = useRef<any>(null)
 
+  const modelStore = useModelStore()
+  const [modelName, setModelName] = useState<string | null>(null)
+  // 设置模型
+  const onChangeModel = (_modelApi: string, {label}: any) => {    
+    setModelName(label)
+  }
+
   // 首次挂载时
   useEffect(() => {
     setCurrentIndex(parseInt(searchParams.get('index') ?? '0'))
+    // 获取智能化标注模型
+    if (modelStore.models.length === 0) {
+      getModels().then(({ data }) => {
+        modelStore.setModels(data)
+        // 默认第一个模型
+        setModelName(data[0]?.modelName)
+      })
+    }else{
+      // 默认第一个模型
+      setModelName(modelStore.models[0].modelName)
+    }
   }, [])
 
   useEffect(() => {
@@ -122,8 +142,11 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
   }
 
   const handleAutoAnnotate = async () => {
+    const apiPath = modelStore.models.find(
+      (model) => model.modelName === modelName
+    )?.modelApi
     setIsAnnotating(true)
-    const res = await detectImageUseOnlineModal(imageList[currentIndex])
+    const res = await detectImageUseOnlineModal(imageList[currentIndex], apiPath as string)
     setLabels(res.results)
     setIsAnnotating(false)
     if (res.results) {
@@ -281,6 +304,23 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
             云智能标注
           </Button>
         )}
+        <div>
+          <span>标注模型：</span>
+          <Select
+            showSearch
+            placeholder="请选择模型"
+            optionFilterProp="children"
+            size="small"
+            value={modelName}
+            onChange={onChangeModel}
+            // onSearch={onSearch}
+            // filterOption={filterOption}
+            options={modelStore.models.map((model) => ({
+              label: model.modelName,
+              value: model.modelApi
+            }))}
+          />
+        </div>
         <Button
           type="primary"
           size="small"

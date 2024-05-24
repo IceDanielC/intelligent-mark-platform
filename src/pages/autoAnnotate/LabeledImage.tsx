@@ -1,6 +1,6 @@
 // @ts-ignore
 import SimpleImageLabel from 'simple-image-label'
-import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react'
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from 'react'
 import type { LabelInfo } from '@/services/detection'
 import { Spin } from 'antd'
 import { useQuery } from 'react-query'
@@ -29,6 +29,7 @@ const ImageLabelComponent: React.FC<{
 }> = forwardRef(
   ({ imageUrl, labels, annotating, imageLoading, setImageLoading }, ref) => {
     const { dataset, version } = useParams()
+    const [imageHeight, setImageHeight] = useState(0)
 
     const simpleImageLabel = useRef<any>(null)
     useImperativeHandle(ref, () => ({
@@ -64,6 +65,7 @@ const ImageLabelComponent: React.FC<{
       // 获取原始高度
       image.onload = () => {
         setImageLoading(false)
+        setImageHeight(image.height)
         simpleImageLabel.current = new SimpleImageLabel({
           el: 'ImageLabelComponent',
           imageUrl: image.src,
@@ -106,7 +108,11 @@ const ImageLabelComponent: React.FC<{
 
     return (
       <Spin tip="图片加载中" spinning={imageLoading}>
-        <div className="bg-gray-100">
+        <div
+          id="imageContainer"
+          className="bg-gray-100"
+          style={imageHeight == 0 ? { height: '60vh' } : {}}
+        >
           <Spin tip="正在智能标注中..." spinning={annotating}>
             <div
               id="ImageLabelComponent"
