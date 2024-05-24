@@ -6,7 +6,7 @@ import {
   saveLabelByImage
 } from '@/services/label'
 import { RobotOutlined } from '@ant-design/icons'
-import { Button, Modal, Popconfirm, Progress, message } from 'antd'
+import { Button, Modal, Popconfirm, Progress, ProgressProps, message } from 'antd'
 import { useState } from 'react'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom'
@@ -99,6 +99,11 @@ const BatchDetectButton: React.FC<{
     window.location.reload()
   }
 
+  const twoColors: ProgressProps['strokeColor'] = {
+    '0%': '#108ee9',
+    '100%': '#87d068',
+  };
+
   return (
     <>
       <Popconfirm
@@ -127,6 +132,7 @@ const BatchDetectButton: React.FC<{
           <Progress
             percent={(process.complete / process.total) * 100}
             status="active"
+            strokeColor={twoColors} 
           />
         </div>
       </Modal>
