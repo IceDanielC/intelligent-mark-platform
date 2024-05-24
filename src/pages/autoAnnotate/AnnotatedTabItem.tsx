@@ -131,7 +131,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
       message.success('自动保存成功')
 
       if (currentIndex !== imageList.length - 1) {
-        if (imageType !== '3') setCurrentIndex(currentIndex + 1)
+        if (imageType === '1') setCurrentIndex(currentIndex + 1)
         setLabels([])
 
         queryClient.invalidateQueries(['/dataset/images'])
