@@ -17,7 +17,7 @@ export type ImageLabelComponentType = {
   y: number
 }
 
-const DEFAULT_COLOR = 'blue'
+export const DEFAULT_COLOR = 'blue'
 
 const ImageLabelComponent: React.FC<{
   imageUrl: string

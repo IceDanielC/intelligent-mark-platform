@@ -21,6 +21,7 @@ import LabelColumn from './LabelColumn'
 import { useLabelStore } from '@/store/useLabelStore'
 import { getModels } from '@/services/model'
 import { useModelStore } from '@/store/useModelStore'
+import BatchDetectButton from './BatchDetectButton'
 
 const imageTypeMap = {
   '1': imagesFromDataset,
@@ -60,7 +61,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
   const modelStore = useModelStore()
   const [modelName, setModelName] = useState<string | null>(null)
   // 设置模型
-  const onChangeModel = (_modelApi: string, {label}: any) => {    
+  const onChangeModel = (_modelApi: string, { label }: any) => {
     setModelName(label)
   }
 
@@ -74,7 +75,7 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
         // 默认第一个模型
         setModelName(data[0]?.modelName)
       })
-    }else{
+    } else {
       // 默认第一个模型
       setModelName(modelStore.models[0].modelName)
     }
@@ -128,7 +129,6 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
     setIsSaving(false)
     if (res.code === 200) {
       message.success('自动保存成功')
-      console.log(imageId, currentIndex, imageList.length, imageType)
 
       if (currentIndex !== imageList.length - 1) {
         if (imageType !== '3') setCurrentIndex(currentIndex + 1)
@@ -141,12 +141,16 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
     }
   }
 
+  // 云服务智能化标注
   const handleAutoAnnotate = async () => {
     const apiPath = modelStore.models.find(
       (model) => model.modelName === modelName
     )?.modelApi
     setIsAnnotating(true)
-    const res = await detectImageUseOnlineModal(imageList[currentIndex], apiPath as string)
+    const res = await detectImageUseOnlineModal(
+      imageList[currentIndex],
+      apiPath as string
+    )
     setLabels(res.results)
     setIsAnnotating(false)
     if (res.results) {
@@ -220,6 +224,13 @@ const AnnotatedTabItem: React.FC<{ imageType: '1' | '2' | '3' }> = ({
 
   return (
     <>
+      {/* TODO 一键标注 */}
+      <BatchDetectButton
+        apiPath={
+          modelStore.models.find((model) => model.modelName === modelName)
+            ?.modelApi ?? ''
+        }
+      />
       <div className="flex">
         <Spin spinning={isSaving} tip="标注保存中...">
           {isLoading ? (
