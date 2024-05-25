@@ -5,13 +5,14 @@ import {
   getDatasetLabels,
   saveLabelByImage
 } from '@/services/label'
-import { RobotOutlined } from '@ant-design/icons'
+import { LoadingOutlined, RobotOutlined } from '@ant-design/icons'
 import {
   Button,
   Modal,
   Popconfirm,
   Progress,
   ProgressProps,
+  Spin,
   Typography,
   message
 } from 'antd'
@@ -26,7 +27,7 @@ export type Process = {
 }
 
 const BatchDetectButton: React.FC<{
-  apiPath: string,
+  apiPath: string
   modelName: string
 }> = ({ apiPath, modelName }) => {
   const { dataset, version } = useParams()
@@ -143,6 +144,10 @@ const BatchDetectButton: React.FC<{
         closable={false}
       >
         <div>
+          <Spin
+            indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />}
+            className="absolute top-5 left-[8rem]"
+          />
           <div>标注过程中请勿刷新页面</div>
           <Progress
             percent={+((process.complete / process.total) * 100).toFixed(1)}
