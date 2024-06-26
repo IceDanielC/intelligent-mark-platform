@@ -1,27 +1,27 @@
 # React + TypeScript + Vite
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 智能化病虫害标注与检测系统前端
 
-Currently, two official plugins are available:
+本地测试需要先启动后端服务
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+本地测试：
+```sh
+pnpm i
 
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
-
-- Configure the top-level `parserOptions` property like this:
-
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
+pnpm run dev
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+系统展示：
+
+<img src="https://cdn.nlark.com/yuque/0/2024/png/27069131/1719419213018-fe1c7743-6ef9-4326-8698-4a9caf8abc9f.png" >
+
+<img src="https://cdn.nlark.com/yuque/0/2024/png/27069131/1719419516132-e4684bc3-a7af-4ff5-af57-1252f8fe6441.png" width="70%">
+
+<img src="https://cdn.nlark.com/yuque/0/2024/png/27069131/1719419516440-c31de550-3be8-4011-90ae-31ff7507d63d.png" width="70%">
+
+<img src="https://cdn.nlark.com/yuque/0/2024/png/27069131/1719419516330-c84f6546-54b8-48f8-885a-4c7892b6d892.png" width="70%">
+
+<img src="https://cdn.nlark.com/yuque/0/2024/png/27069131/1719419516753-f91830cb-b915-44c1-93bc-7fc7817ece59.png" >
+
+<img src="https://cdn.nlark.com/yuque/0/2024/png/27069131/1719419516561-6342bebd-bf15-4da9-966e-c850ef6ec57f.png" >
+
